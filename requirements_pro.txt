@@ -1,0 +1,11 @@
+blinker==1.4
+cffi==1.8.1
+Django==1.6.11
+django-mongodb-engine==0.6.0
+django-rest-framework-mongoengine==3.3.0
+djangorestframework==3.2.5
+djangotoolbox==1.8.0
+greenlet==0.4.10
+mongoengine==0.10.6
+pymongo==3.3.1
+readline==6.2.4.1
