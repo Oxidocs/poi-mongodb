@@ -51,7 +51,7 @@ header {
       #slider .container h1 span, #slider .container h3 span {
         font-weight: bold; }
     #slider .container h1 {
-      color: blue;
+      color: red;
       margin-top: 70px; }
     #slider .container h3 {
       margin: 0; }
@@ -152,10 +152,10 @@ header {
     color: gray;
     transition: all 0.25s ease-in-out; }
     #nav .navbar-nav li a:hover {
-      color: blue;
+      color: red;
       background: none; }
   #nav .navbar-nav li.active a {
-    color: blue; }
+    color: red; }
   #nav .navbar-nav.social {
     margin-left: 15px; }
     #nav .navbar-nav.social li {
@@ -165,14 +165,14 @@ header {
         #nav .navbar-nav.social li a i {
           color: gray; }
       #nav .navbar-nav.social li:hover {
-        background: blue; }
+        background: red; }
         #nav .navbar-nav.social li:hover a i {
           color: #FFFFFF; }
 
 section {
   padding: 75px 0; }
   section#features {
-    background: blue; }
+    background: red; }
     section#features .feature {
       text-align: center;
       color: #FFFFFF; }
@@ -196,8 +196,8 @@ section {
       section#features .carousel-indicators li {
         width: 15px;
         height: 15px;
-        background: #000099;
-        border-color: #000099;
+        background: #990000;
+        border-color: #990000;
         transition: all 0.25s ease-in-out;
         margin: 3px; }
         section#features .carousel-indicators li.active {
@@ -295,7 +295,7 @@ section {
             border: none !important; }
   section#settings {
     color: #FFFFFF;
-    background: blue; }
+    background: red; }
     section#settings img {
       margin-left: 30px; }
     section#settings h2 {
@@ -318,9 +318,9 @@ section {
       section#screenshots .section-heading h3 {
         color: #999999; }
         section#screenshots .section-heading h3 span {
-          color: blue; }
+          color: red; }
       section#screenshots .section-heading .divider {
-        background: blue; }
+        background: red; }
       section#screenshots .section-heading p {
         color: #999999; }
     section#screenshots .owl-next, section#screenshots .owl-prev {
@@ -338,8 +338,8 @@ section {
         padding-right: 5px;
         transition: all 0.25s ease-in-out; }
       section#screenshots .owl-next:hover i, section#screenshots .owl-prev:hover i {
-        color: blue;
-        border-color: blue; }
+        color: red;
+        border-color: red; }
     section#screenshots .owl-next i {
       padding-right: inherit;
       padding-left: 5px; }
@@ -447,7 +447,7 @@ section {
             width: 18px;
             height: 18px; }
   section#team {
-    background: blue; }
+    background: red; }
     section#team .car-next, section#team .car-prev {
       text-align: center;
       display: block;
@@ -463,8 +463,8 @@ section {
         padding-right: 5px;
         transition: all 0.25s ease-in-out; }
       section#team .car-next:hover i, section#team .car-prev:hover i {
-        color: #6666ff;
-        border-color: #6666ff; }
+        color: #ff6666;
+        border-color: #ff6666; }
     section#team .car-next i {
       padding-right: inherit;
       padding-left: 5px; }
@@ -511,9 +511,9 @@ section {
         background: #FFFFFF;
         color: #555555; }
         section#team .member:hover .media-heading {
-          color: blue; }
+          color: red; }
           section#team .member:hover .media-heading ul li a i {
-            color: blue; }
+            color: red; }
         section#team .member:hover span.divider {
           background: #555555; }
   section#subscribe {
@@ -663,7 +663,7 @@ footer {
 
 .btn.btn-default {
   background: #FFFFFF;
-  color: blue; }
+  color: red; }
   .btn.btn-default:hover {
     background: none;
     color: #FFFFFF; }
@@ -673,7 +673,7 @@ footer {
   color: #FFFFFF; }
   .btn.btn-empty:hover {
     background: #FFFFFF;
-    color: blue; }
+    color: red; }
 
 a {
   transition: all 0.25s ease-in-out; }

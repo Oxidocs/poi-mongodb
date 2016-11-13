@@ -1,85 +1,214 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_mongodb_engine.contrib import MongoDBManager
-from djangotoolbox.fields import EmbeddedModelField
+from djangotoolbox.fields import EmbeddedModelField, ListField
+
 
 class Sexo(models.Model):
-	valor = models.CharField(max_length=50)
+	valor_arabe = models.CharField(max_length=50, blank=True)
+	valor_chino = models.CharField(max_length=50, blank=True)
+	valor_espanol = models.CharField(max_length=50, blank=True)
+	valor_frances = models.CharField(max_length=50, blank=True)
+	valor_ingles = models.CharField(max_length=50, blank=True)
+	valor_ruso = models.CharField(max_length=50, blank=True)
+	valor_portuges = models.CharField(max_length=50, blank=True)
+
 	def __unicode__(self):
-		return u'%s' % self.valor
+		return u'%s' % self.valor_espanol
+	class Meta:
+		verbose_name_plural = "Sexos"
 
 class Perfiles(models.Model):
 	fecha_de_nac = models.DateField(auto_now=False,auto_now_add=False, blank=True)
 	usuario = models.ForeignKey(User)
-	sexo = models.ForeignKey(Sexo)
+	sexo = models.CharField(max_length=50)
+	image = models.ImageField(upload_to='profiles/')
+
 	def __unicode__(self):
 		return u'%s' % self.usuario
 	class Meta:
 		verbose_name_plural = "Perfiles"
 
 class Categorias(models.Model):
-	nombre = models.CharField(max_length=255)
-	descripcion = models.CharField(max_length=500)
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
+	descripcion_arabe = models.CharField(max_length=500, blank=True)
+	descripcion_chino = models.CharField(max_length=500, blank=True)
+	descripcion_espanol = models.CharField(max_length=500, blank=True)
+	descripcion_frances = models.CharField(max_length=500, blank=True)
+	descripcion_ingles = models.CharField(max_length=500, blank=True)
+	descripcion_ruso = models.CharField(max_length=500, blank=True)
+	descripcion_portuges = models.CharField(max_length=500, blank=True)
+
 	def __unicode__(self):
-		return u'%s' % self.nombre
+		return u'%s' % self.nombre_espanol
 	class Meta:
 		verbose_name_plural = "Categorías"
 
 class Subcategorias(models.Model):
-	nombre = models.CharField(max_length=255)
-	descripcion = models.CharField(max_length=500)
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
+	descripcion_arabe = models.CharField(max_length=500, blank=True)
+	descripcion_chino = models.CharField(max_length=500, blank=True)
+	descripcion_espanol = models.CharField(max_length=500, blank=True)
+	descripcion_frances = models.CharField(max_length=500, blank=True)
+	descripcion_ingles = models.CharField(max_length=500, blank=True)
+	descripcion_ruso = models.CharField(max_length=500, blank=True)
+	descripcion_portuges = models.CharField(max_length=500, blank=True)
+
 	categoria = models.ForeignKey(Categorias)
+
 	def __unicode__(self):
-		return u'%s' % self.nombre
+		return u'%s' % self.nombre_espanol
 	class Meta:
 		verbose_name_plural = "Sub Categorías"
 
 class Pais(models.Model):
-	nombre = models.CharField(max_length=255)
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
 	def __unicode__(self):
-		return str(self.nombre)
+		return str(self.nombre_espanol)
 	class Meta:
 		verbose_name_plural = "Países"
 
 class Ciudades(models.Model):
-	nombre = models.CharField(max_length=255)
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
 	pais = models.ForeignKey(Pais)
+
 	def __unicode__(self):
-		return u'%s' % self.nombre
+		return u'%s' % self.nombre_espanol
 	class Meta:
 		verbose_name_plural = "Ciudades"
 
 class Lugares(models.Model):
 	categoria = models.ForeignKey(Categorias)
-	ciudad = models.ForeignKey(Ciudades)
-	nombre = models.CharField(max_length=255)
-	direccion = models.CharField(max_length=255)
-	icono = models.CharField(max_length=255)
-	portada = models.CharField(max_length=255)
-	descripcion = models.CharField(max_length=500)
-	sitio_web = models.CharField(max_length=500)
+	ciudad = EmbeddedModelField(Ciudades)
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
+	direccion = models.CharField(max_length=255, blank=True)
+	icono = models.CharField(max_length=255, blank=True)
+	portada = models.CharField(max_length=255, blank=True)
+
+	descripcion_arabe = models.CharField(max_length=500, blank=True)
+	descripcion_chino = models.CharField(max_length=500, blank=True)
+	descripcion_espanol = models.CharField(max_length=500, blank=True)
+	descripcion_frances = models.CharField(max_length=500, blank=True)
+	descripcion_ingles = models.CharField(max_length=500, blank=True)
+	descripcion_ruso = models.CharField(max_length=500, blank=True)
+	descripcion_portuges = models.CharField(max_length=500, blank=True)
+
+	sitio_web = models.CharField(max_length=500, blank=True)
 	fecha_de_creacion = models.DateTimeField(auto_now_add=True, blank=True)
 	def __unicode__(self):
-		return u'%s' % self.nombre
+		return u'%s' % self.nombre_espanol
 	class Meta:
 		verbose_name_plural = "Lugares"
 
-class Rutas(models.Model):
-	nombre = models.CharField(max_length=255)
-	descripcion = models.CharField(max_length=500)
-	ciudad = models.ForeignKey(Ciudades)
+class Empresas(models.Model):
+	categoria = models.ForeignKey(Categorias)
+	ciudad = EmbeddedModelField(Ciudades)
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
+	direccion = models.CharField(max_length=255, blank=True)
+	icono = models.CharField(max_length=255, blank=True)
+	portada = models.CharField(max_length=255, blank=True)
+
+	descripcion_arabe = models.CharField(max_length=500, blank=True)
+	descripcion_chino = models.CharField(max_length=500, blank=True)
+	descripcion_espanol = models.CharField(max_length=500, blank=True)
+	descripcion_frances = models.CharField(max_length=500, blank=True)
+	descripcion_ingles = models.CharField(max_length=500, blank=True)
+	descripcion_ruso = models.CharField(max_length=500, blank=True)
+	descripcion_portuges = models.CharField(max_length=500, blank=True)
+	
+	sitio_web = models.CharField(max_length=500, blank=True)
+	fecha_de_creacion = models.DateTimeField(auto_now_add=True, blank=True)
 	def __unicode__(self):
-		return u'%s' % self.nombre
+		return u'%s' % self.nombre_espanol
+	class Meta:
+		verbose_name_plural = "Empresas"
+
+class Rutas(models.Model):
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
+	descripcion_arabe = models.CharField(max_length=500, blank=True)
+	descripcion_chino = models.CharField(max_length=500, blank=True)
+	descripcion_espanol = models.CharField(max_length=500, blank=True)
+	descripcion_frances = models.CharField(max_length=500, blank=True)
+	descripcion_ingles = models.CharField(max_length=500, blank=True)
+	descripcion_ruso = models.CharField(max_length=500, blank=True)
+	descripcion_portuges = models.CharField(max_length=500, blank=True)
+
+	ciudad = models.CharField(max_length=255)
+	def __unicode__(self):
+		return u'%s' % self.nombre_espanol
 	class Meta:
 		verbose_name_plural = "Rutas"
 
 class Circuitos(models.Model):
-	nombre = models.CharField(max_length=255)
-	descripcion = models.CharField(max_length=500)
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
+	descripcion_arabe = models.CharField(max_length=500, blank=True)
+	descripcion_chino = models.CharField(max_length=500, blank=True)
+	descripcion_espanol = models.CharField(max_length=500, blank=True)
+	descripcion_frances = models.CharField(max_length=500, blank=True)
+	descripcion_ingles = models.CharField(max_length=500, blank=True)
+	descripcion_ruso = models.CharField(max_length=500, blank=True)
+	descripcion_portuges = models.CharField(max_length=500, blank=True)
+
 	ruta = models.ForeignKey(Rutas)
 	lugares = models.ManyToManyField(Lugares)
 	def __unicode__(self):
-		return u'%s' % self.nombre
+		return u'%s' % self.nombre_espanol
 	class Meta:
 		verbose_name_plural = "Circuitos"
 
@@ -94,7 +223,8 @@ class Point(models.Model):
 class Coordenadas(models.Model):
 	location = EmbeddedModelField(Point)
 	objects = MongoDBManager()
-	lugar = models.ForeignKey(Lugares)
+	lugar = models.ForeignKey(Lugares, blank=True)
+	empresa = models.ForeignKey(Empresas, blank=True)
 	def __unicode__(self):
 		return u'%s' % self.lugar
 	class Meta:
@@ -109,11 +239,33 @@ class Ranking(models.Model):
 	class Meta:
 		verbose_name_plural = "Ranking"
 
-class Roles(models.Model):
-	nombre = models.CharField(max_length=255)
-	descripcion = models.CharField(max_length=500)
+class RankingEmpresa(models.Model):
+	empresa = models.ForeignKey(Empresas)
+	usuario = models.ForeignKey(User)
+	valor = models.IntegerField(default=0)
 	def __unicode__(self):
-		return u'%s' % self.nombre
+		return u'%s' % self.empresa
+	class Meta:
+		verbose_name_plural = "Ranking"
+
+class Roles(models.Model):
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
+	descripcion_arabe = models.CharField(max_length=500, blank=True)
+	descripcion_chino = models.CharField(max_length=500, blank=True)
+	descripcion_espanol = models.CharField(max_length=500, blank=True)
+	descripcion_frances = models.CharField(max_length=500, blank=True)
+	descripcion_ingles = models.CharField(max_length=500, blank=True)
+	descripcion_ruso = models.CharField(max_length=500, blank=True)
+	descripcion_portuges = models.CharField(max_length=500, blank=True)
+	def __unicode__(self):
+		return u'%s' % self.nombre_espanol
 	class Meta:
 		verbose_name_plural = "Roles"
 
@@ -127,11 +279,18 @@ class Permisos(models.Model):
 		verbose_name_plural = "Permisos"
 
 class Galerias(models.Model):
-	nombre = models.CharField(max_length=255)
+	nombre_arabe = models.CharField(max_length=255, blank=True)
+	nombre_chino = models.CharField(max_length=255, blank=True)
+	nombre_espanol = models.CharField(max_length=255, blank=True)
+	nombre_frances = models.CharField(max_length=255, blank=True)
+	nombre_ingles = models.CharField(max_length=255, blank=True)
+	nombre_ruso = models.CharField(max_length=255, blank=True)
+	nombre_portuges = models.CharField(max_length=255, blank=True)
+
 	alt = models.CharField(max_length=255)
 	path = models.CharField(max_length=255)
 	def __unicode__(self):
-		return u'%s' % self.nombre
+		return u'%s' % self.nombre_espanol
 	class Meta:
 		verbose_name_plural = "Galerías"
 
@@ -151,15 +310,15 @@ class Tag(models.Model):
 
 class Email(models.Model):
 	valor = models.EmailField(max_length=100, unique= True)
-	lugar = models.ForeignKey(Lugares)
-	perfil = models.ForeignKey(Perfiles)
+	lugar = models.ForeignKey(Lugares, blank=True)
+	perfil = models.ForeignKey(Perfiles, blank=True)
 	def __unicode__(self):
 		return u'%s' % self.valor
 
 class Telefonos(models.Model):
 	valor = models.IntegerField()
-	lugar = models.ForeignKey(Lugares)
-	perfil = models.ForeignKey(Perfiles)
+	lugar = models.ForeignKey(Lugares, blank=True)
+	perfil = models.ForeignKey(Perfiles, blank=True)
 	def __unicode__(self):
 		return u'%s' % self.valor
 	class Meta:
