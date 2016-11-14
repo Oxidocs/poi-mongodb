@@ -48,6 +48,7 @@ gulp.task('watch', function() {
 	// Watch .html files
 	gulp.watch('../../templates/plataforma/*.html', browserSync.reload);
 	// Watch .js files
+	gulp.watch('build/js/*.js', ['scripts']);
 	gulp.watch('src/js/*.js', ['scripts']);
 	// Watch .scss files
 	gulp.watch('src/scss/*.scss', ['sass', 'sass-minify']);

@@ -1,7 +1,7 @@
 from django.shortcuts import render#, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from backend.models import Perfiles
+from backend.models import Perfiles, Lugares, Coordenadas, Point
 import json
 
 from django.contrib import messages
@@ -56,3 +56,20 @@ def getPerfil(request):
 	}
 
 	return HttpResponse(json.dumps(context), content_type="application/json")
+
+def saveLugar(request):
+
+	latitude = request.POST.get('lat')
+	longitude =request.POST.get('long')
+
+	lugar = Lugares.objects.all().count()
+	lugar = lugar + 1
+	nombre = "Lugar %s" % lugar
+
+	Lugares(nombre_espanol = nombre).save()
+
+	lugar = Lugares.objects.latest('id').id
+
+	Coordenadas(lugar_id=lugar, location=Point(latitude=latitude,longtitude=longitude)).save()
+
+	return HttpResponse(json.dumps(lugar), content_type="application/json")

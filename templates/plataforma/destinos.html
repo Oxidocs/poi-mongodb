@@ -1,23 +1,53 @@
 {% extends 'plataforma/base.html' %}
+{% load static %}
 
 {% block title %}Poi Plataforma | Destinos{% endblock %}
 
 {% block css %}
+<!-- PNotify -->
+<link href="{% static "back/vendors/pnotify/dist/pnotify.css" %}" rel="stylesheet">
+<link href="{% static "back/vendors/pnotify/dist/pnotify.buttons.css" %}" rel="stylesheet">
+<link href="{% static "back/vendors/pnotify/dist/pnotify.nonblock.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 
+	<!-- page content -->
 	<div class="right_col" role="main">
 		<div class="">
 			<div class="page-title">
 				<div class="title_left">
-					<h3>Fixed Sidebar <small> Just add class <strong>menu_fixed</strong></small></h3>
+					<h3>Destinos</h3>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="x_panel">
+						<div class="x_title">
+							<h2>Mapa</h2>
+							<div class="clearfix"></div>
+						</div>
+						<div class="x_content">
+							<div id="map"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<!-- /page content -->
 
 {% endblock %}
 
 {% block javascript %}
+	<!-- PNotify -->
+    <script src="{% static "back/vendors/pnotify/dist/pnotify.js" %}"></script>
+    <script src="{% static "back/vendors/pnotify/dist/pnotify.buttons.js" %}"></script>
+    <script src="{% static "back/vendors/pnotify/dist/pnotify.nonblock.js" %}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhj68UdS4_RWpK1k3xJzTqHzTQZmAccvU&libraries=drawing"&signed_in=true&libraries=drawing></script>
+	<script src="{% static "back/build/js/geolocation-marker.js" %}"></script>
+	<script src="{% static "back/build/js/map.js" %}"></script>
 {% endblock %}

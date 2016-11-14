@@ -106,8 +106,8 @@ class Ciudades(models.Model):
 		verbose_name_plural = "Ciudades"
 
 class Lugares(models.Model):
-	categoria = models.ForeignKey(Categorias)
-	ciudad = EmbeddedModelField(Ciudades)
+	categoria = models.ForeignKey(Categorias, null=True, blank=True)
+	ciudad = EmbeddedModelField(Ciudades, null=True, blank=True)
 	nombre_arabe = models.CharField(max_length=255, blank=True)
 	nombre_chino = models.CharField(max_length=255, blank=True)
 	nombre_espanol = models.CharField(max_length=255, blank=True)
@@ -136,8 +136,8 @@ class Lugares(models.Model):
 		verbose_name_plural = "Lugares"
 
 class Empresas(models.Model):
-	categoria = models.ForeignKey(Categorias)
-	ciudad = EmbeddedModelField(Ciudades)
+	categoria = models.ForeignKey(Categorias, blank=True)
+	ciudad = EmbeddedModelField(Ciudades, blank=True)
 	nombre_arabe = models.CharField(max_length=255, blank=True)
 	nombre_chino = models.CharField(max_length=255, blank=True)
 	nombre_espanol = models.CharField(max_length=255, blank=True)
@@ -223,8 +223,8 @@ class Point(models.Model):
 class Coordenadas(models.Model):
 	location = EmbeddedModelField(Point)
 	objects = MongoDBManager()
-	lugar = models.ForeignKey(Lugares, blank=True)
-	empresa = models.ForeignKey(Empresas, blank=True)
+	lugar = models.ForeignKey(Lugares,null=True , blank=True)
+	empresa = models.ForeignKey(Empresas,null=True , blank=True)
 	def __unicode__(self):
 		return u'%s' % self.lugar
 	class Meta:

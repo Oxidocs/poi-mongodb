@@ -13,4 +13,5 @@ urlpatterns = [
 	url(r'^informes/', views.Informes, name='informes'),
 	url(r'^calendarios/', views.Calendarios, name='calendarios'),
 	url(r'^get_perfil/', views.getPerfil, name='get-perfil'),
+	url(r'^guardar_lugar/', views.saveLugar, name='guardar-lugar'),
 ]
