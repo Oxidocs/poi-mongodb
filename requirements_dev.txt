@@ -7,5 +7,6 @@ djangorestframework==3.2.5
 djangotoolbox==1.8.0
 greenlet==0.4.10
 mongoengine==0.10.6
+Pillow==2.9.0
 pymongo==3.3.1
 readline==6.2.4.1
