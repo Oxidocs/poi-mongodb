@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 from django.db import models
 from django.contrib.auth.models import User
 from django_mongodb_engine.contrib import MongoDBManager
