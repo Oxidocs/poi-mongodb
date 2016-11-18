@@ -1,6 +1,72 @@
 
 var map, GeoMarker, infoWindow;
 
+var contents = '<h4 class="text-center">Nuevo Lugar</h4>';
+	contents += '<div class="ln_solid"></div>';
+	contents += '<form class="form-horizontal form-label-left">';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Id: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="id" name="id" class="form-control" type="text" placeholder="Id" />';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Nombre: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="nombre" name="nombre" class="form-control" type="text" placeholder="Nombre" />';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Dirección: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="direccion" name="direccion" class="form-control" type="text" placeholder="Dirección" />';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Latitud: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="latitud" name="latitud" class="form-control" type="text" placeholder="Latitud" />';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Longitud: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="longitud" name="longitud" class="form-control" type="text" placeholder="Longitud" />';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Icono: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="icono" name="icono" class="form-control" type="file" placeholder="Icono" />';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Portada: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="portada" name="portada" class="form-control" type="file" placeholder="Portada" />';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Descripción: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<textarea id="descripcion" name="descripcion" class="form-control" placeholder="Descripción"></textarea>';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Sitio Web: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="sitio_web" name="sitio_web" class="form-control" type="text" placeholder="Sitio Web" />';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="ln_solid"></div>';
+	contents +=	'<div class="form-group">';
+	contents +=	'<div class="col-xs-6 col-xs-offset-6">';
+	contents += '<button type="reset" class="btn btn-primary">Cancelar</button>';
+	contents += '<button type="submit" class="btn btn-success">Guardar</button>';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '</form>';
+
 function initialize() {
 
 	var mapOptions = {
@@ -77,88 +143,29 @@ function crearMarcador(marker) {
 	var lat = marker.position.lat();
 	var long = marker.position.lng();
 
-	guardarLugar(lat,long);
-
 	var myLatlng = new google.maps.LatLng(lat,long);
 	var marker_created = new google.maps.Marker({
 			position: myLatlng,
 			draggable:true,
 	});
 
+	guardarLugar(lat,long, marker_created);
+
 	marker.setMap(null);
 	marker_created.setMap(map);
-
-	var contents = '<h4 class="text-center">Nuevo Lugar</h4>';
-	contents += '<div class="ln_solid"></div>';
-	contents += '<form class="form-horizontal form-label-left">';
-	contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Nombre: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input class="form-control" type="text" placeholder="Nombre" />';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Dirección: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input class="form-control" type="text" placeholder="Dirección" />';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Latitud: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input class="form-control" type="text" placeholder="Latitud" />';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Longitud: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input class="form-control" type="text" placeholder="Longitud" />';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Icono: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input class="form-control" type="file" placeholder="Icono" />';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Portada: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input class="form-control" type="file" placeholder="Portada" />';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Descripción: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<textarea class="form-control" placeholder="Descripción"></textarea>';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Sitio Web: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input class="form-control" type="text" placeholder="Sitio Web" />';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="ln_solid"></div>';
-	contents +=	'<div class="form-group">';
-	contents +=	'<div class="col-xs-6 col-xs-offset-6">';
-	contents += '<button type="reset" class="btn btn-primary">Cancelar</button>';
-	contents += '<button type="submit" class="btn btn-success">Guardar</button>';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '</form>';
 
 	infoWindow.setContent(contents);
 	infoWindow.open(map, marker_created);
 
 	marker_created.addListener('click', function() {
-		var contents = 'Hello World';
+		console.log(marker_created);
 		infoWindow.setContent(contents);
 		infoWindow.open(map, marker_created);
+		cargarLugares(marker_created.id);
 	});
 }
 
-function guardarLugar(lat, long){
+function guardarLugar(lat, long, marker){
 	event.preventDefault();
 	var csrftoken = getCookie('csrftoken');
 	var url = '/plataforma/guardar_lugar/';
@@ -181,7 +188,7 @@ function guardarLugar(lat, long){
 		},
 		success : function(data) {
 
-			console.log(data);
+			marker.set("id", data);
 
 			new PNotify({
 				title: 'Guardado',
@@ -191,13 +198,69 @@ function guardarLugar(lat, long){
 			});
 		},
 		error : function(xhr,errmsg,err) {
-			new PNotify({
-				title: '¡Oh No!',
-				text: 'Acaba de ocurrir un error',
-				type: 'error',
-				styling: 'bootstrap3'
-			});
+			error();
 			console.log(xhr.status + ": " + xhr.responseText);
 		}
 	});
 }
+
+function actualizarLugar(){
+
+}
+
+function mostrarLugar(){
+
+}
+
+function cargarLugares(id){
+
+	event.preventDefault();
+	var csrftoken = getCookie('csrftoken');
+	var url = '/plataforma/mostrar_lugar/';
+
+	$.ajax({
+		url : url,
+		type : "POST",
+		data : { id : id },
+
+		beforeSend: function(xhr, settings) {
+
+			if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			}
+		},
+		success : function(data) {
+			console.log(data);
+			// cargarFormularioLugar(data.id, data.nombre, data.direccion, data.latitud, data.longitud, data.icono, data.portada, data.descripcion, data.sitio_web);
+		},
+		error : function(xhr,errmsg,err) {
+			
+			console.log(xhr.status + ": " + xhr.responseText);
+		}
+	});
+
+}
+
+function cargarFormularioLugar(id, nombre, direccion, latitud, longitud, icono, portada, descripcion, sitio_web){
+	
+	$('#id').val(id);
+	$('#nombre').val(nombre);
+	$('#direccion').val(direccion);
+	$('#latitud').val(latitud);
+	$('#longitud').val(longitud);
+	$('#icono').val(icono);
+	$('#portada').val(portada);
+	$('#descripcion').val(descripcion);
+	$('#sitio_web').val(sitio_web);
+
+}
+
+function error(){
+	new PNotify({
+		title: '¡Oh No!',
+		text: 'Acaba de ocurrir un error',
+		type: 'error',
+		styling: 'bootstrap3'
+	});
+}
+

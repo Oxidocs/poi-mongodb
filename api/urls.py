@@ -7,6 +7,8 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'rutas', views.RutasViewSet)
 router.register(r'perfiles', views.PerfilesViewSet)
+router.register(r'categorias', views.CategoriasViewSet)
+router.register(r'lugares', views.LugaresViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

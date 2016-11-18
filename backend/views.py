@@ -73,3 +73,17 @@ def saveLugar(request):
 	Coordenadas(lugar_id=lugar, location=Point(latitude=latitude,longtitude=longitude)).save()
 
 	return HttpResponse(json.dumps(lugar), content_type="application/json")
+
+def getLugar(request):
+
+	lugar_id = request.POST.get('id')
+
+	lugar = Lugares.objects.get(pk=lugar_id);
+
+	context = {
+		'id' : lugar.id,
+		
+	}
+	
+
+	return HttpResponse(json.dumps(context), content_type="application/json")

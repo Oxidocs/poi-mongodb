@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django_mongodb_engine.contrib import MongoDBManager
 from djangotoolbox.fields import EmbeddedModelField, ListField
 
-
 class Sexo(models.Model):
 	valor_arabe = models.CharField(max_length=50, blank=True)
 	valor_chino = models.CharField(max_length=50, blank=True)
@@ -13,7 +12,6 @@ class Sexo(models.Model):
 	valor_ingles = models.CharField(max_length=50, blank=True)
 	valor_ruso = models.CharField(max_length=50, blank=True)
 	valor_portuges = models.CharField(max_length=50, blank=True)
-
 	def __unicode__(self):
 		return u'%s' % self.valor_espanol
 	class Meta:
@@ -22,7 +20,7 @@ class Sexo(models.Model):
 class Perfiles(models.Model):
 	fecha_de_nac = models.DateField(auto_now=False,auto_now_add=False, blank=True)
 	usuario = models.ForeignKey(User)
-	sexo = models.CharField(max_length=50)
+	sexo = EmbeddedModelField(Sexo)
 	image = models.ImageField(upload_to='profiles/')
 
 	def __unicode__(self):

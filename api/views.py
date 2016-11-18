@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
-from backend.models import Rutas, Perfiles
+from backend.models import Rutas, Perfiles, Lugares, Categorias
 from rest_framework import viewsets
-from api.serializers import UserSerializer, GroupSerializer, RutasSerializer, PerfilesSerializer
+from api.serializers import UserSerializer, GroupSerializer, RutasSerializer, PerfilesSerializer, LugaresSerializer, CategoriasSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -20,3 +20,11 @@ class PerfilesViewSet(viewsets.ModelViewSet):
 class RutasViewSet(viewsets.ModelViewSet):
 	queryset = Rutas.objects.all()
 	serializer_class = RutasSerializer
+
+class CategoriasViewSet(viewsets.ModelViewSet):
+	queryset = Categorias.objects.all()
+	serializer_class = CategoriasSerializer
+
+class LugaresViewSet(viewsets.ModelViewSet):
+	queryset = Lugares.objects.all()
+	serializer_class = LugaresSerializer
