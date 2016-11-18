@@ -23,7 +23,7 @@ gulp.task('sass', function(){
 
   gulp.task('browser-sync', function(){
     bs.init({
-      proxy: "ubuntu-fabian:8000"
+      proxy: "localhost:8000"
     });
   });
 
