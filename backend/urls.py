@@ -4,6 +4,8 @@ from . import views
 
 urlpatterns = [
 	url(r'^home/', views.Index, name='index'),
+	url(r'^editar_perfil/', views.editarPerfil, name='editar-perfil'),
+	# url(r'^post/(?P<pk>[0-9]+)/$', views.perfil_detail),
 	url(r'^destinos/', views.Destinos, name='destinos'),
 	url(r'^servicios/', views.Servicios, name='servicios'),
 	url(r'^productos/', views.Productos, name='productos'),

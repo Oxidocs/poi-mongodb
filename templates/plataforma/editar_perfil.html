@@ -1,0 +1,113 @@
+{% extends 'plataforma/base.html' %}
+{% load static %}
+
+{% block title %}Poi Plataforma | Home{% endblock %}
+
+{% block css %}
+	<!-- bootstrap-daterangepicker -->
+	<link href="{% static "back/vendors/bootstrap-daterangepicker/daterangepicker.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+	<div class="right_col" role="main">
+		<div class="container">
+			<div class="page-title">
+				<div class="">
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<div class="x_panel">
+								<div class="x_title">
+									<h2>Perfil <small>Editando mi perfil</small></h2>
+									<div class="clearfix"></div>
+								</div>
+								<div class="x_content">
+									<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+										<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										{% for field in users %}
+											<div class="form-group">
+												<label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													{{ field }}
+												</div>
+											</div>
+										{% endfor %}
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+											<div class="form-group">
+												<label class="control-label col-md-3 col-sm-3 col-xs-12">Sexo</label>
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<div id="gender" class="btn-group" data-toggle="buttons">
+														{% for sexo in sexos %}
+															{% if sexo.valor_espanol = "Masculino" %}
+																<label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+																	<input type="radio" name="gender" value="{{ sexo.valor_espanol }}"> &nbsp; {{ sexo.valor_espanol }} &nbsp;
+																</label>
+															{% else %}
+																<label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+																	<input type="radio" name="gender" value="{{ sexo.valor_espanol }}"> &nbsp; {{ sexo.valor_espanol }} &nbsp;
+																</label>
+															{% endif %}
+														{% endfor %}
+													</div>
+												</div>
+											</div>
+											{% for field in perfiles %}
+												<div class="form-group">
+													<label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label>
+													<div class="col-md-9 col-sm-9 col-xs-12">
+														{{ field }}
+													</div>
+												</div>
+											{% endfor %}
+										</div>
+										<div class="clearfix"></div>
+										<div class="ln_solid"></div>
+										<div class="form-group pull-right">
+											<div class="col-lg-12 col-xs-12">
+												<button type="submit" class="btn btn-primary">Volver</button>
+												<button type="submit" class="btn btn-success">Guardar Cambios</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+
+						{{ users.as_p }}
+
+						{% for sexo in sexos %}
+							<input type="radio" name="sexo">{{ sexo.valor_espanol }}
+						{% endfor %}
+						{{ form.as_p }}					
+						<button type="submit" class="save btn btn-default">Guardar</button>
+					</form> -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+	<!-- bootstrap-daterangepicker -->
+	<script src="{% static "back/vendors/moment/min/moment.min.js" %}" ></script>
+	<script src="{% static "back/vendors/bootstrap-daterangepicker/daterangepicker.js" %}" ></script>
+
+	<!-- bootstrap-daterangepicker -->
+	<script>
+		$(document).ready(function() {
+			$('#id_fecha_de_nac').daterangepicker({
+				singleDatePicker: true,
+				calender_style: "picker_4"
+			}, function(start, end, label) {
+				console.log(start.toISOString(), end.toISOString(), label);
+			});
+		});
+	</script>
+	<!-- /bootstrap-daterangepicker -->
+{% endblock %}

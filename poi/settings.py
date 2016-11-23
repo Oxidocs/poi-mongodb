@@ -14,7 +14,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -34,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django.contrib.auth',
+	# 'django.contrib.sites',
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.messages',
@@ -80,6 +80,8 @@ DATABASES = {
 
 LANGUAGE_CODE = 'es-mx'
 
+# SITE_ID = u'58313f79947840296fdcd474'
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -94,11 +96,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = "/var/www/poi-mongodb/poi-mongodb/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATICFILES_DIRS = [
-	os.path.join(BASE_DIR, "static_dev"),
-	os.path.join(BASE_DIR, "static")
+	os.path.join(BASE_DIR, "static_dev"),	
 ]
 
 MEDIA_URL= '/media/'
@@ -115,6 +116,7 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+
 
 LOGGING = {
 	'version': 1,

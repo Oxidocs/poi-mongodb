@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from backend.models import Rutas, Perfiles, Lugares, Categorias, Subcategorias, Empresas, Circuitos
+from backend.models import Sexo, Perfil, Categoria, Subcategoria, Lugar, Empresa, Ruta, Circuito, Ranking, RankingEmpresa, Rol, Permiso, Galeria, Pais, Ciudad, Coordenada
     
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,39 +14,83 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 		model = Group
 		fields = ('url', 'name')
 
-class PerfilesSerializer(serializers.HyperlinkedModelSerializer):
+class PerfilSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Perfiles
-		fields = ('url', 'fecha_de_nac', 'usuario', 'sexo', 'image')
+		model = Perfil
+		fields = ('url', 'usuario', 'sexo', 'emails', 'telefonos', 'fecha_de_nac', 'image')
 
-class CategoriasSerializer(serializers.HyperlinkedModelSerializer):
+class CategoriaSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Categorias
-		fields = ('url', 'nombre_arabe', 'nombre_chino', 'nombre_espanol', 'nombre_frances', 'nombre_ingles', 'nombre_ruso', 'nombre_portuges', 'descripcion_arabe', 'descripcion_chino', 'descripcion_espanol', 'descripcion_frances', 'descripcion_ingles', 'descripcion_ruso', 'descripcion_portuges')
+		model = Categoria
+		fields = ('url', 'nombre', 'descripcion')
 
-class SubcategoriasSerializer(serializers.HyperlinkedModelSerializer):
+class SubcategoriaSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Subcategorias
-		fields = ('url', 'nombre_arabe', 'nombre_chino', 'nombre_espanol', 'nombre_frances', 'nombre_ingles', 'nombre_ruso', 'nombre_portuges', 'descripcion_arabe', 'descripcion_chino', 'descripcion_espanol', 'descripcion_frances', 'descripcion_ingles', 'descripcion_ruso', 'descripcion_portuges')
+		model = Subcategoria
+		fields = ('url', 'nombre', 'descripcion', 'categoria')
 
-class LugaresSerializer(serializers.HyperlinkedModelSerializer):
+class PaisSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Lugares
-		fields = ('url', 'categoria', 'ciudad', 'nombre_arabe', 'nombre_chino', 'nombre_espanol', 'nombre_frances', 'nombre_ingles', 'nombre_ruso', 'nombre_portuges', 'direccion', 'icono', 'portada', 'descripcion_arabe', 'descripcion_chino', 'descripcion_espanol', 'descripcion_frances', 'descripcion_ingles', 'descripcion_ruso', 'descripcion_portuges', 'sitio_web', 'fecha_de_creacion')
+		model = Pais
+		fields = ('url', 'nombre')
 
-class EmpresasSerializer(serializers.HyperlinkedModelSerializer):
+class CiudadSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Empresas
-		fields = ('url', 'categoria', 'ciudad', 'nombre_arabe', 'nombre_chino', 'nombre_espanol', 'nombre_frances', 'nombre_ingles', 'nombre_ruso', 'nombre_portuges', 'direccion', 'icono', 'portada', 'descripcion_arabe', 'descripcion_chino', 'descripcion_espanol', 'descripcion_frances', 'descripcion_ingles', 'descripcion_ruso', 'descripcion_portuges', 'sitio_web', 'fecha_de_creacion')
+		model = Ciudad
+		fields = ('url', 'nombre', 'pais')
 
-class RutasSerializer(serializers.HyperlinkedModelSerializer):
+class LugarSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Rutas
+		model = Lugar
+		fields = ('url', 'nombre', 'descripcion', 'categoria', 'ciudad', 'location', 'objects', 'direccion', 'icono', 'portada', 'sitio_web', 'redes_sociales', 'fecha_de_creacion', 'tags')
+
+class EmpresaSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Empresa
+		fields = ('url', 'nombre', 'descripcion', 'categoria', 'ciudad', 'objects', 'direccion', 'icono', 'portada', 'sitio_web', 'redes_sociales', 'fecha_de_creacion', 'tags')
+
+class RutaSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Ruta
 		fields = ('url', 'nombre', 'descripcion', 'ciudad')
 
-class CircuitosSerializer(serializers.HyperlinkedModelSerializer):
+class CircuitoSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Circuitos
-		fields = ('nombre_arabe' ,'nombre_chino' ,'nombre_espanol' ,'nombre_frances' ,'nombre_ingles' ,'nombre_ruso' ,'nombre_portuges' ,	'descripcion_arabe' ,'descripcion_chino' ,'descripcion_espanol' ,'descripcion_frances' ,'descripcion_ingles' ,'descripcion_ruso' ,'descripcion_portuges' ,)
+		model = Circuito
+		fields = ('url', 'nombre', 'descripcion', 'ruta', 'lugares')
+
+class CoordenadaSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Coordenada
+		fields = ('url', 'location', 'objects', 'empresa')
+
+class RankingSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Ranking
+		fields = ('url', 'lugar', 'usuario', 'valor')
+
+class RankingEmpresaSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = RankingEmpresa
+		fields = ('url', 'empresa', 'usuario', 'valor')
+
+class RolSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Rol
+		fields = ('url', 'nombre', 'descripcion')
+
+class PermisoSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Permiso
+		fields = ('url', 'lugar', 'usuario', 'rol')
+
+class GaleriaSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Galeria
+		fields = ('url', 'nombre', 'alt', 'path')
+
+
+
+
 
 

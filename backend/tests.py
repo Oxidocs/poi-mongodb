@@ -26,3 +26,7 @@ from django.db.models import F,Q
 # lugar = Lugares.objects.filter(id="5824de939478400fd82b9661").first()
 # lugar.ciudad=Ciudades(nombre_espanol='Vicuña', pais_id='5824e19b947840100290769e')
 # lugar.save()
+
+lugar = Lugares.objects.filter(id="582f717a9478400faf64ecef").first()
+lugar.location = Point(latitude='-29.983333',longtitude='-70.683333')
+lugar.save()

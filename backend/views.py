@@ -1,7 +1,8 @@
 from django.shortcuts import render#, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from backend.models import Perfiles, Lugares, Coordenadas, Point
+from backend.models import Perfil, Lugar, Coordenada, Point, Sexo
+from .forms import ProfileForm, UserForm
 import json
 
 from django.contrib import messages
@@ -9,6 +10,34 @@ from django.contrib import messages
 @login_required(login_url='/plataforma/login/')
 def Index(request):
 	return render(request, 'plataforma/index.html')
+
+@login_required(login_url='/plataforma/login/')
+def editarPerfil(request):
+
+	sexo = Sexo.objects.all()
+
+	if request.method == "POST":
+		form = ProfileForm(request.POST, request.FILES)
+		user = UserForm()
+
+		if form.is_valid():
+			perfil = form.save(commit=False)
+			perfil.usuario = request.user
+			perfil.sexo = Sexo(valor_espanol=request.POST['sexo'])
+			perfil.save()
+			render(request, 'plataforma/editar_perfil.html')
+
+	else:
+		form = ProfileForm()
+		user = UserForm()
+
+	response = {
+		'perfiles': form,
+		'users': user,
+		'sexos': sexo,
+	}
+
+	return render(request, 'plataforma/editar_perfil.html', response)
 
 @login_required(login_url='/plataforma/login/')
 def Destinos(request):
@@ -45,12 +74,14 @@ def Calendarios(request):
 def getPerfil(request):
 
 	id_user = request.POST.get('id')
-	perfil = Perfiles.objects.filter(usuario__pk=id_user).first()
-	if perfil.image is not None:
-		imagen = perfil.image.name
-	else:
-		imagen = '/media/prfiles/images/img.jpg'
-		
+	perfil = Perfil.objects.filter(usuario__pk=id_user).first()
+	imagen = '/profiles/default/img.jpg'
+
+	if perfil is not None:
+		if perfil.image is not None:
+			if perfil.image != "":
+				imagen = perfil.image.name
+			
 	context = {
 		'imagen': imagen,
 	}
@@ -62,15 +93,15 @@ def saveLugar(request):
 	latitude = request.POST.get('lat')
 	longitude =request.POST.get('long')
 
-	lugar = Lugares.objects.all().count()
+	lugar = Lugar.objects.all().count()
 	lugar = lugar + 1
 	nombre = "Lugar %s" % lugar
 
-	Lugares(nombre_espanol = nombre).save()
+	Lugar(nombre_espanol = nombre).save()
 
-	lugar = Lugares.objects.latest('id').id
+	lugar = Lugar.objects.latest('id').id
 
-	Coordenadas(lugar_id=lugar, location=Point(latitude=latitude,longtitude=longitude)).save()
+	Coordenada(lugar_id=lugar, location=Point(latitude=latitude,longtitude=longitude)).save()
 
 	return HttpResponse(json.dumps(lugar), content_type="application/json")
 
@@ -78,11 +109,10 @@ def getLugar(request):
 
 	lugar_id = request.POST.get('id')
 
-	lugar = Lugares.objects.get(pk=lugar_id);
+	lugar = Lugar.objects.get(pk=lugar_id);
 
 	context = {
 		'id' : lugar.id,
-		
 	}
 	
 
