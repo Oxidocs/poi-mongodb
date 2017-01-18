@@ -10,7 +10,7 @@ def getPerfil(request):
 
 	if perfil is not None:
 		if perfil.image is not None and perfil.image != "":
-			imagen = perfil.image.name
+			imagen = '/%s' %perfil.image.name
 
 	response = {
 		'sexos': sexo,
