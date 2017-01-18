@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from backend.models import Perfil, Lugar, Coordenada, Point, Sexo
 from backend.perfil import getPerfil
-import json
+import json, datetime, locale
 
 from django.contrib import messages
 
@@ -53,14 +53,8 @@ def Calendarios(request):
 
 @login_required(login_url='/plataforma/login/')
 def editarPerfil(request):
-	
-		#if request.method == "POST":
-		# if form.is_valid():
-		# 	perfil = form.save(commit=False)
-		# 	perfil.usuario = request.user
-		# 	perfil.sexo = Sexo(valor_espanol=request.POST['sexo'])
-		# 	perfil.save()
-		# 	render(request, 'plataforma/editar_perfil.html')
+
+	locale.setlocale(locale.LC_ALL, "")
 
 	if request.method=='POST':
 
@@ -78,6 +72,9 @@ def editarPerfil(request):
 		sexo=data.get('sexo')
 		fecha_de_nac=data.get('fecha_de_nac')
 
+		if fecha_de_nac != "":				
+			fecha_de_nac = datetime.datetime.strptime(fecha_de_nac, '%d %B %Y').strftime("%Y-%m-%d")
+
 		sexo_doument = Sexo(
 			valor_arabe = "",
 			valor_chino = "",
@@ -88,25 +85,43 @@ def editarPerfil(request):
 			valor_portuges = ""
 		)
 
+		######### Obteniendo Usuario #############
+
+		usuario = User.objects.filter(pk=request.user.id).first()
+
+		if username!='':
+			usuario.username = username
+		if nombres!='':
+			usuario.first_name = nombres 
+		if apellidos!='':
+			usuario.last_name = apellidos
+		if email!='':
+			usuario.email = email
+
+		usuario.save() #actualizar usuario
+
+		######### Obteniendo Perfil de Usuario #############
+
 		perfil = Perfil.objects.filter(usuario__pk=request.user.id).first()
+
 		if perfil is None:
-			
 			Perfil(
 				usuario = request.user,
 				sexo = sexo_doument,
-				#fecha_de_nac = fecha_de_nac,
+				fecha_de_nac = fecha_de_nac,
 				image = img
-			).save()
+			).save() #crear perfil
 		else:
-			if sexo is not None:				
+			if sexo is not None:
 				perfil.sexo = sexo_doument
+
+			if fecha_de_nac != "":
+				perfil.fecha_de_nac = fecha_de_nac
 			
-			#perfil.fecha_de_nac = fecha_de_nac,
-			
-			if img!="":
+			if img != "":
 				perfil.image = img
 
-			perfil.save()
+			perfil.save() #actualizar perfil
 		
 
 		response ={
@@ -115,7 +130,7 @@ def editarPerfil(request):
 		return HttpResponse(json.dumps(response), content_type="application/json")
 	else:
 		response = {
-			'perfil': getPerfil(request)			
+			'perfil': getPerfil(request)
 		}
 		return render(request, 'plataforma/editar_perfil.html', response)
 
