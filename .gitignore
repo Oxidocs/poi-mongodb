@@ -3,3 +3,4 @@ static_dev/node_modules/
 static_dev/back/node_modules/
 static_dev/back/.sass-cache
 *.pyc
+.DS_Store
