@@ -1,2 +1,4 @@
-
+node_modules/
+static_dev/node_modules/
+static_dev/back/node_modules/
 *.pyc

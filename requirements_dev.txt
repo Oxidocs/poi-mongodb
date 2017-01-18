@@ -1,5 +1,5 @@
 blinker==1.4
-cffi==1.8.1
+#cffi==1.8.1
 Django==1.6.11
 django-mongodb-engine==0.6.0
 django-rest-framework-mongoengine==3.3.0

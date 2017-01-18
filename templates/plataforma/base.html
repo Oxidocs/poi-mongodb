@@ -19,6 +19,10 @@
 	<link href="{% static "back/vendors/nprogress/nprogress.css" %}" rel="stylesheet">
 	<!-- jQuery custom content scroller -->
 	<link href="{% static "back/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" %}" rel="stylesheet"/>
+	<!-- PNotify -->
+	<link href="{% static "back/vendors/pnotify/dist/pnotify.css" %}" rel="stylesheet">
+	<link href="{% static "back/vendors/pnotify/dist/pnotify.buttons.css" %}" rel="stylesheet">
+	<link href="{% static "back/vendors/pnotify/dist/pnotify.nonblock.css" %}" rel="stylesheet">
 	<!-- Custom Theme Style -->
 	<link href="{% static "back/build/css/custom.min.css" %}" rel="stylesheet">
 	{% block css %}
@@ -28,31 +32,7 @@
 	<!-- Ajax JS -->
 	<script src="{% static "back/build/js/jquery.cookie.js" %}"></script>
 	<script src="{% static "back/build/js/ajax.js" %}"></script>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			event.preventDefault();
-			var csrftoken = getCookie('csrftoken');
-			var url = '/plataforma/get_perfil/';
 
-			$.ajax({
-				url : url,
-				type : "POST",
-				data : { id : '{{ user.id }}' },
-
-				beforeSend: function(xhr, settings) {
-					if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-						xhr.setRequestHeader("X-CSRFToken", csrftoken);
-					}
-				},
-				success : function(data) {
-					$('img.profile').attr('src','/media/'+data.imagen)
-				},
-				error : function(xhr,errmsg,err) {
-					console.log(xhr.status + ": " + xhr.responseText);
-				}
-			});
-		});
-	</script>
 </head>
 
 <body class="nav-md">
@@ -67,7 +47,7 @@
 					<!-- menu profile quick info -->
 					<div class="profile">
 						<div class="profile_pic">
-							<img src="" alt="..." class="img-circle profile_img profile">
+							<img src="{{ perfil.imagen_perfil }}" alt="..." class="img-circle profile_img profile">
 						</div>
 						<div class="profile_info">
 							<span>Bienvenido,</span>
@@ -136,7 +116,7 @@
 						<ul class="nav navbar-nav navbar-right">
 							<li class="">
 								<a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-									<img src="" alt="" class="profile">
+									<img src="{{ perfil.imagen_perfil }}" alt="" class="profile">
 									{% if user.is_authenticated %}
 										{{ user.get_full_name }}
 									{% endif %}
@@ -187,9 +167,15 @@
 	<script src="{% static "back/vendors/nprogress/nprogress.js" %}"></script>
 	<!-- jQuery custom content scroller -->
 	<script src="{% static "back/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js" %}"></script>
+	<!-- PNotify -->
+    <script src="{% static "back/vendors/pnotify/dist/pnotify.js" %}"></script>
+    <script src="{% static "back/vendors/pnotify/dist/pnotify.buttons.js" %}"></script>
+    <script src="{% static "back/vendors/pnotify/dist/pnotify.nonblock.js" %}"></script>
+    <!-- /PNotify -->
 
 	<!-- Custom Theme Scripts -->
 	<script src="{% static "back/build/js/custom.min.js" %}"></script>
+
 
 	{% block javascript %}
 	{% endblock %}

@@ -40,7 +40,7 @@ gulp.task('sass-minify', function() {
 
 gulp.task('browser-sync', function() {
 	browserSync.init({
-		proxy: "ubuntu-fabian:8000/plataforma/home"
+		proxy: "localhost:8000/plataforma/home"
 	});
 });
 

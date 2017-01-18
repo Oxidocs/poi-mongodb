@@ -19,7 +19,7 @@ class UserForm(forms.ModelForm):
 			'email': 'Email',
 		}
 		widgets = {
-			'username': forms.TextInput(attrs={'class': 'form-control', 'id':'username', 'name': 'username', 'placeholder':'Nombre de Usuario'}),
+			'username': forms.TextInput(attrs={'class': 'form-control', 'id':'username', 'name': 'username', 'placeholder':'Nombre de Usuario', 'value':'{{ usuername }}'}),
 			'first_name': forms.TextInput(attrs={'class': 'form-control', 'id':'first_name', 'name': 'first_name', 'placeholder':'Nombres'}),
 			'last_name': forms.TextInput(attrs={'class': 'form-control', 'id':'last_name', 'name': 'last_name', 'placeholder':'Apellidos'}),
 			'email': forms.EmailInput(attrs={'class': 'form-control', 'id':'email', 'name': 'email', 'placeholder':'Email'}),

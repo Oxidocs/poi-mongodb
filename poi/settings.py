@@ -82,7 +82,7 @@ LANGUAGE_CODE = 'es-mx'
 
 # SITE_ID = u'58313f79947840296fdcd474'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 

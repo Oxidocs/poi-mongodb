@@ -1,47 +1,26 @@
 from django.shortcuts import render#, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from backend.models import Perfil, Lugar, Coordenada, Point, Sexo
-from .forms import ProfileForm, UserForm
+from backend.perfil import getPerfil
 import json
 
 from django.contrib import messages
 
 @login_required(login_url='/plataforma/login/')
 def Index(request):
-	return render(request, 'plataforma/index.html')
-
-@login_required(login_url='/plataforma/login/')
-def editarPerfil(request):
-
-	sexo = Sexo.objects.all()
-
-	if request.method == "POST":
-		form = ProfileForm(request.POST, request.FILES)
-		user = UserForm()
-
-		if form.is_valid():
-			perfil = form.save(commit=False)
-			perfil.usuario = request.user
-			perfil.sexo = Sexo(valor_espanol=request.POST['sexo'])
-			perfil.save()
-			render(request, 'plataforma/editar_perfil.html')
-
-	else:
-		form = ProfileForm()
-		user = UserForm()
-
 	response = {
-		'perfiles': form,
-		'users': user,
-		'sexos': sexo,
+		'perfil': getPerfil(request)
 	}
-
-	return render(request, 'plataforma/editar_perfil.html', response)
+	return render(request, 'plataforma/index.html', response)
 
 @login_required(login_url='/plataforma/login/')
 def Destinos(request):
-	return render(request, 'plataforma/destinos.html')
+	response = {
+		'perfil': getPerfil(request)
+	}
+	return render(request, 'plataforma/destinos.html',response)
 
 @login_required(login_url='/plataforma/login/')
 def Servicios(request):
@@ -71,22 +50,74 @@ def Informes(request):
 def Calendarios(request):
 	return render(request, 'plataforma/calendarios.html')
 
-def getPerfil(request):
 
-	id_user = request.POST.get('id')
-	perfil = Perfil.objects.filter(usuario__pk=id_user).first()
-	imagen = '/profiles/default/img.jpg'
+@login_required(login_url='/plataforma/login/')
+def editarPerfil(request):
+	
+		#if request.method == "POST":
+		# if form.is_valid():
+		# 	perfil = form.save(commit=False)
+		# 	perfil.usuario = request.user
+		# 	perfil.sexo = Sexo(valor_espanol=request.POST['sexo'])
+		# 	perfil.save()
+		# 	render(request, 'plataforma/editar_perfil.html')
 
-	if perfil is not None:
-		if perfil.image is not None:
-			if perfil.image != "":
-				imagen = perfil.image.name
+	if request.method=='POST':
+
+		if 'img_perfil' in request.FILES:
+			img = request.FILES['img_perfil']
+		else:
+			img = ""
+
+		data = request.POST
+
+		username=data.get('username')
+		nombres=data.get('nombres')
+		apellidos=data.get('apellidos')
+		email=data.get('email')
+		sexo=data.get('sexo')
+		fecha_de_nac=data.get('fecha_de_nac')
+
+		sexo_doument = Sexo(
+			valor_arabe = "",
+			valor_chino = "",
+			valor_espanol = sexo,
+			valor_frances = "",
+			valor_ingles = "",
+			valor_ruso = "",
+			valor_portuges = ""
+		)
+
+		perfil = Perfil.objects.filter(usuario__pk=request.user.id).first()
+		if perfil is None:
 			
-	context = {
-		'imagen': imagen,
-	}
+			Perfil(
+				usuario = request.user,
+				sexo = sexo_doument,
+				#fecha_de_nac = fecha_de_nac,
+				image = img
+			).save()
+		else:
+			if sexo is not None:				
+				perfil.sexo = sexo_doument
+			
+			#perfil.fecha_de_nac = fecha_de_nac,
+			
+			if img!="":
+				perfil.image = img
 
-	return HttpResponse(json.dumps(context), content_type="application/json")
+			perfil.save()
+		
+
+		response ={
+			'data': [username, nombres, apellidos, email, sexo, fecha_de_nac]
+		}
+		return HttpResponse(json.dumps(response), content_type="application/json")
+	else:
+		response = {
+			'perfil': getPerfil(request)			
+		}
+		return render(request, 'plataforma/editar_perfil.html', response)
 
 def saveLugar(request):
 

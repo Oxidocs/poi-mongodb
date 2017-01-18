@@ -1,5 +1,5 @@
 from django.test import TestCase
-from models import Coordenadas, Point, Lugares, Ciudades
+from models import Coordenadas, Point, Lugares, Ciudades, Sexo
 from django.db.models import F,Q
 
 #list
@@ -27,6 +27,10 @@ from django.db.models import F,Q
 # lugar.ciudad=Ciudades(nombre_espanol='Vicuña', pais_id='5824e19b947840100290769e')
 # lugar.save()
 
-lugar = Lugares.objects.filter(id="582f717a9478400faf64ecef").first()
-lugar.location = Point(latitude='-29.983333',longtitude='-70.683333')
-lugar.save()
+#lugar = Lugares.objects.filter(id="582f717a9478400faf64ecef").first()
+#lugar.location = Point(latitude='-29.983333',longtitude='-70.683333')
+#lugar.save()
+
+
+Sexo(valor_espanol="Masculino").save()
+Sexo(valor_espanol="Femenino").save()

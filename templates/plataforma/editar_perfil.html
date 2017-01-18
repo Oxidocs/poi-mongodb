@@ -22,50 +22,71 @@
 									<div class="clearfix"></div>
 								</div>
 								<div class="x_content">
-									<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+									<form data-parsley-validate class="form-horizontal form-label-left send" enctype="multipart/form-data">
+									{% csrf_token %}
 										<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-										{% for field in users %}
 											<div class="form-group">
-												<label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label>
+												<label class="col-md-3 col-sm-3 col-xs-12 text-right">Nombre de usuario</label>
 												<div class="col-md-9 col-sm-9 col-xs-12">
-													{{ field }}
+													<input id="username" name="username" class="form-control" type="text" value="{{ user.username }}" placeholder="Nombre de Usuario">
 												</div>
 											</div>
-										{% endfor %}
+											<div class="form-group">
+												<label class="control-label col-md-3 col-sm-3 col-xs-12">Nombres</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input id="nombres" name="nombres" class="form-control" type="text" value="{{user.first_name}}" placeholder="Nombres">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3 col-sm-3 col-xs-12">Apellidos</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input id="apellidos" name="apellidos" class="form-control" type="text" value="{{user.last_name}}" placeholder="Apellidos">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="text-right col-md-3 col-sm-3 col-xs-12">Correo electrónico</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input id="email" name="email" class="form-control" type="email" value="{{user.email}}" placeholder="email@email.cl">
+												</div>
+											</div>
 										</div>
 										<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 											<div class="form-group">
 												<label class="control-label col-md-3 col-sm-3 col-xs-12">Sexo</label>
 												<div class="col-md-6 col-sm-6 col-xs-12">
 													<div id="gender" class="btn-group" data-toggle="buttons">
-														{% for sexo in sexos %}
+														{% for sexo in perfil.sexos %}
 															{% if sexo.valor_espanol = "Masculino" %}
 																<label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-																	<input type="radio" name="gender" value="{{ sexo.valor_espanol }}"> &nbsp; {{ sexo.valor_espanol }} &nbsp;
+																	<input type="radio" name="sexo" value="{{ sexo.valor_espanol }}"> &nbsp; {{ sexo.valor_espanol }} &nbsp;
 																</label>
 															{% else %}
 																<label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-																	<input type="radio" name="gender" value="{{ sexo.valor_espanol }}"> &nbsp; {{ sexo.valor_espanol }} &nbsp;
+																	<input type="radio" name="sexo" value="{{ sexo.valor_espanol }}"> &nbsp; {{ sexo.valor_espanol }} &nbsp;
 																</label>
 															{% endif %}
 														{% endfor %}
 													</div>
 												</div>
 											</div>
-											{% for field in perfiles %}
-												<div class="form-group">
-													<label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label>
-													<div class="col-md-9 col-sm-9 col-xs-12">
-														{{ field }}
-													</div>
+											<div class="form-group">
+												<label class="text-right col-md-3	 col-sm-3 col-xs-12">Fecha de Nacimiento</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input id="id_fecha_de_nac" name="fecha_de_nac" type="text" class="form-control date-picker">
 												</div>
-											{% endfor %}
+											</div>
+											<div class="form-group">
+												<label class="text-right col-md-3 col-sm-3 col-xs-12">Imagen de perfil</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input type="file" name="img_perfil" class="form-control">
+												</div>
+											</div>											
 										</div>
 										<div class="clearfix"></div>
 										<div class="ln_solid"></div>
 										<div class="form-group pull-right">
 											<div class="col-lg-12 col-xs-12">
-												<button type="submit" class="btn btn-primary">Volver</button>
+												<button type="button" class="btn btn-primary">Volver</button>
 												<button type="submit" class="btn btn-success">Guardar Cambios</button>
 											</div>
 										</div>
@@ -74,17 +95,6 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
-
-						{{ users.as_p }}
-
-						{% for sexo in sexos %}
-							<input type="radio" name="sexo">{{ sexo.valor_espanol }}
-						{% endfor %}
-						{{ form.as_p }}					
-						<button type="submit" class="save btn btn-default">Guardar</button>
-					</form> -->
 				</div>
 			</div>
 		</div>
@@ -95,19 +105,10 @@
 {% block javascript %}
 
 	<!-- bootstrap-daterangepicker -->
-	<script src="{% static "back/vendors/moment/min/moment.min.js" %}" ></script>
+	<script src="{% static "back/vendors/moment/min/moment-with-locales.min.js" %}" ></script>
 	<script src="{% static "back/vendors/bootstrap-daterangepicker/daterangepicker.js" %}" ></script>
-
-	<!-- bootstrap-daterangepicker -->
-	<script>
-		$(document).ready(function() {
-			$('#id_fecha_de_nac').daterangepicker({
-				singleDatePicker: true,
-				calender_style: "picker_4"
-			}, function(start, end, label) {
-				console.log(start.toISOString(), end.toISOString(), label);
-			});
-		});
-	</script>
 	<!-- /bootstrap-daterangepicker -->
+	<!--custom-->
+	<script type="text/javascript" src="{% static "back/build/js/edit_profile.js" %}"></script>
+	<!--/custom-->
 {% endblock %}
