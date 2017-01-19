@@ -2,7 +2,7 @@ from django.shortcuts import render#, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from backend.models import Perfil, Lugar, Coordenada, Point, Sexo
+from backend.models import Perfil, Lugar, Coordenada, Point, Sexo, Nombre
 from backend.perfil import getPerfil
 import json, datetime, locale
 
@@ -143,11 +143,30 @@ def saveLugar(request):
 	lugar = lugar + 1
 	nombre = "Lugar %s" % lugar
 
-	Lugar(nombre_espanol = nombre).save()
+	nombre = Nombre(
+			nombre_arabe = "",
+			nombre_chino = "",
+			nombre_espanol = nombre,
+			nombre_frances = "",
+			nombre_ingles = "",
+			nombre_ruso = "",
+			nombre_portuges = ""
+	 	)
 
-	lugar = Lugar.objects.latest('id').id
+	point = Point(
+		latitude = latitude,
+		longtitude = longitude
+	)
+		
 
-	Coordenada(lugar_id=lugar, location=Point(latitude=latitude,longtitude=longitude)).save()
+	lugar = Lugar(
+		nombre = nombre,
+		location = point
+	).save()
+
+	#lugar = Lugar.objects.latest('id').id
+
+	#Coordenada(lugar_id=lugar, location=Point(latitude=latitude,longtitude=longitude)).save()
 
 	return HttpResponse(json.dumps(lugar), content_type="application/json")
 

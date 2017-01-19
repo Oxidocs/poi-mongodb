@@ -120,7 +120,7 @@ class Point(models.Model):
 
 class Lugar(models.Model):
 	nombre = EmbeddedModelField(Nombre)
-	descripcion = EmbeddedModelField(Descripcion)
+	descripcion = EmbeddedModelField(Descripcion, null=True, blank=True)
 	categoria = models.ForeignKey(Categoria, null=True, blank=True)
 	ciudad = EmbeddedModelField(Ciudad, null=True, blank=True)
 	location = EmbeddedModelField(Point, blank=True, null=True)
@@ -131,7 +131,7 @@ class Lugar(models.Model):
 	sitio_web = models.CharField(max_length=500, blank=True)
 	redes_sociales = ListField(EmbeddedModelField(RedSocial))
 	fecha_de_creacion = models.DateTimeField(auto_now_add=True, blank=True)
-	tags = EmbeddedModelField(Tag)
+	tags = EmbeddedModelField(Tag, null=True, blank=True)
 	def __unicode__(self):
 		return u'%s' % self.nombre
 	class Meta:
