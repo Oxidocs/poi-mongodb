@@ -1,5 +1,7 @@
+from django.http import HttpResponse, HttpResponseRedirect
 from backend.models import Perfil, Sexo
-import datetime
+from django.shortcuts import render
+import json
 
 
 def getPerfil(request):
@@ -22,3 +24,12 @@ def getPerfil(request):
 	}
 
 	return response
+
+def validarUsuario(request, template, response, type):
+	if request.user.is_staff:
+		if type == "render":
+			return render(request, template, response)
+		elif type == "json":
+			return HttpResponse(json.dumps(response), content_type="application/json")
+	else:
+		return HttpResponseRedirect('/plataforma/login/')

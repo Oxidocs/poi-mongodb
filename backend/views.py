@@ -1,10 +1,10 @@
 from django.shortcuts import render#, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from backend.models import Perfil, Lugar, Coordenada, Point, Sexo, Nombre
-from backend.perfil import getPerfil
-import json, datetime, locale
+from backend.perfil import getPerfil, validarUsuario
+import datetime, locale
 
 from django.contrib import messages
 
@@ -13,42 +13,63 @@ def Index(request):
 	response = {
 		'perfil': getPerfil(request)
 	}
-	return render(request, 'plataforma/index.html', response)
+	return validarUsuario(request, 'plataforma/index.html', response, "render")
 
 @login_required(login_url='/plataforma/login/')
 def Destinos(request):
 	response = {
 		'perfil': getPerfil(request)
 	}
-	return render(request, 'plataforma/destinos.html',response)
+	return validarUsuario(request, 'plataforma/destinos.html',response, "render")
 
 @login_required(login_url='/plataforma/login/')
 def Servicios(request):
-	return render(request, 'plataforma/servicios.html')
+	response = {
+		'perfil': getPerfil(request)
+	}
+	return validarUsuario(request, 'plataforma/servicios.html', response, "render")
 
 @login_required(login_url='/plataforma/login/')
 def Productos(request):
-	return render(request, 'plataforma/productos.html')
+	response = {
+		'perfil': getPerfil(request)
+	}
+	return validarUsuario(request, 'plataforma/productos.html', response, "render")
 
 @login_required(login_url='/plataforma/login/')
 def Circuitos(request):
-	return render(request, 'plataforma/circuitos.html')
+	response = {
+		'perfil': getPerfil(request)
+	}
+	return validarUsuario(request, 'plataforma/circuitos.html', response, "render")
 
 @login_required(login_url='/plataforma/login/')
 def Rutas(request):
-	return render(request, 'plataforma/rutas.html')
+	response = {
+		'perfil': getPerfil(request)
+	}
+	return validarUsuario(request, 'plataforma/rutas.html', response, "render")
 
 @login_required(login_url='/plataforma/login/')
 def Estadisticas(request):
-	return render(request, 'plataforma/estadisticas.html')
+	response = {
+		'perfil': getPerfil(request)
+	}
+	return validarUsuario(request, 'plataforma/estadisticas.html', response, "render")
 
 @login_required(login_url='/plataforma/login/')
 def Informes(request):
-	return render(request, 'plataforma/informes.html')
+	response = {
+		'perfil': getPerfil(request)
+	}
+	return validarUsuario(request, 'plataforma/informes.html', response, "render")
 
 @login_required(login_url='/plataforma/login/')
 def Calendarios(request):
-	return render(request, 'plataforma/calendarios.html')
+	response = {
+		'perfil': getPerfil(request)
+	}
+	return validarUsuario(request, 'plataforma/calendarios.html', response, "render")
 
 
 @login_required(login_url='/plataforma/login/')
@@ -127,12 +148,12 @@ def editarPerfil(request):
 		response ={
 			'data': [username, nombres, apellidos, email, sexo, fecha_de_nac]
 		}
-		return HttpResponse(json.dumps(response), content_type="application/json")
+		return validarUsuario(request, '', response, "json")
 	else:
 		response = {
 			'perfil': getPerfil(request)
 		}
-		return render(request, 'plataforma/editar_perfil.html', response)
+		return validarUsuario(request, 'plataforma/editar_perfil.html', response, "render")
 
 def saveLugar(request):
 
@@ -164,21 +185,46 @@ def saveLugar(request):
 		location = point
 	).save()
 
-	#lugar = Lugar.objects.latest('id').id
+	lugar = Lugar.objects.latest('id').id
 
-	#Coordenada(lugar_id=lugar, location=Point(latitude=latitude,longtitude=longitude)).save()
-
-	return HttpResponse(json.dumps(lugar), content_type="application/json")
+	return validarUsuario(request, '', lugar, "json")
 
 def getLugar(request):
 
 	lugar_id = request.POST.get('id')
 
 	lugar = Lugar.objects.get(pk=lugar_id);
+	fecha_de_creacion = ""
+	portada = "";
+	icono = "";
+
+	if lugar.icono is not None and lugar.icono != "":
+		icono = lugar.icono	
+	if lugar.icono is not None and lugar.icono != "":
+		portada = lugar.portada
+
+	if lugar.fecha_de_creacion != "":
+		print lugar.fecha_de_creacion
+		fecha_de_creacion = lugar.fecha_de_creacion.strftime("%Y-%m-%d")
 
 	context = {
 		'id' : lugar.id,
+		'nombre': lugar.nombre.nombre_espanol,
+		'descripcion': lugar.descripcion,
+		'categoria': lugar.categoria,
+		'ciudad': lugar.ciudad,
+		'latitude': lugar.location.latitude,
+		'longtitude': lugar.location.longtitude,
+		'direccion': lugar.direccion,
+		'icono': icono,
+		'portada': portada,
+		'sitio_web': lugar.sitio_web,
+		'redes_sociales': lugar.redes_sociales,
+		'fecha_de_creacion': fecha_de_creacion,
+		'tags': lugar.tags
 	}
 	
 
-	return HttpResponse(json.dumps(context), content_type="application/json")
+	return validarUsuario(request,'',context, "json")
+
+

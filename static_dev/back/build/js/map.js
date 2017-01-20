@@ -1,7 +1,7 @@
 
 var map, GeoMarker, infoWindow;
 
-var contents = '<h4 class="text-center">Nuevo Lugar</h4>';
+var contents = '<h4 id="title" class="text-center">Nuevo Lugar</h4>';
 	contents += '<div class="ln_solid"></div>';
 	contents += '<form class="form-horizontal form-label-left">';
 	contents += '<div class="form-group">';
@@ -176,12 +176,6 @@ function guardarLugar(lat, long, marker){
 		data : { lat : lat, long: long },
 
 		beforeSend: function(xhr, settings) {
-			new PNotify({
-				title: 'Guardando',
-				text: 'Guardando los cambios',
-				type: 'info',
-				styling: 'bootstrap3'
-			});
 			if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
 				xhr.setRequestHeader("X-CSRFToken", csrftoken);
 			}
@@ -231,7 +225,7 @@ function cargarLugares(id){
 		},
 		success : function(data) {
 			console.log(data);
-			// cargarFormularioLugar(data.id, data.nombre, data.direccion, data.latitud, data.longitud, data.icono, data.portada, data.descripcion, data.sitio_web);
+			cargarFormularioLugar(data.id, data.nombre, data.direccion, data.latitude, data.longtitude, data.icono, data.portada, data.descripcion, data.sitio_web);
 		},
 		error : function(xhr,errmsg,err) {
 			
@@ -244,6 +238,7 @@ function cargarLugares(id){
 function cargarFormularioLugar(id, nombre, direccion, latitud, longitud, icono, portada, descripcion, sitio_web){
 	
 	$('#id').val(id);
+	$('#title').text(nombre);
 	$('#nombre').val(nombre);
 	$('#direccion').val(direccion);
 	$('#latitud').val(latitud);
