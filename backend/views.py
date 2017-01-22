@@ -2,8 +2,8 @@ from django.shortcuts import render#, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from backend.models import Perfil, Lugar, Coordenada, Point, Sexo, Nombre
-from backend.perfil import getPerfil, validarUsuario
+from backend.models import Perfil, Lugar, Coordenada, Point, Sexo, Nombre, Descripcion
+from backend.usuario import getPerfil, validarUsuario
 import datetime, locale
 
 from django.contrib import messages
@@ -158,36 +158,113 @@ def editarPerfil(request):
 def saveLugar(request):
 
 	latitude = request.POST.get('lat')
-	longitude =request.POST.get('long')
+	longtitude =request.POST.get('long')
+	id_lugar = request.POST.get('id');
 
-	lugar = Lugar.objects.all().count()
-	lugar = lugar + 1
-	nombre = "Lugar %s" % lugar
+	if 'icono' in request.FILES:
+		icono = request.FILES['icono']
+	else:
+		icono = ""
 
-	nombre = Nombre(
-			nombre_arabe = "",
-			nombre_chino = "",
-			nombre_espanol = nombre,
-			nombre_frances = "",
-			nombre_ingles = "",
-			nombre_ruso = "",
-			nombre_portuges = ""
-	 	)
+	if 'portada' in request.FILES:
+		portada = request.FILES['portada']
+	else:
+		portada = ""
 
-	point = Point(
-		latitude = latitude,
-		longtitude = longitude
-	)
+	if id_lugar is not None:
+
+		latitude = request.POST.get('latitud')
+		longtitude =request.POST.get('longitud')
+		direccion = request.POST.get('direccion')
+		descripcion = request.POST.get('descripcion')
+		sitio_web = request.POST.get('sitio_web')
+
+		if request.POST.get('nombre') is None or request.POST.get('nombre')=='':
+			lugar = Lugar.objects.all().count()
+			lugar = lugar + 1
+			nombre = "Lugar %s" % lugar
+		else:
+			nombre = request.POST.get('nombre')
+
+		nombre = Nombre(
+				nombre_arabe = "",
+				nombre_chino = "",
+				nombre_espanol = nombre,
+				nombre_frances = "",
+				nombre_ingles = "",
+				nombre_ruso = "",
+				nombre_portuges = ""
+		 	)
+
+		descripcion = Descripcion(
+				descripcion_arabe = "",
+				descripcion_chino = "",
+				descripcion_espanol = descripcion,
+				descripcion_frances = "",
+				descripcion_ingles = "",
+				descripcion_ruso = "",
+				descripcion_portuges = ""
+			)	
+
+		point = Point(
+			latitude = latitude,
+			longtitude = longtitude
+		)
+
+		lugar = Lugar.objects.get(pk=id_lugar)
+		lugar.nombre = nombre
+		lugar.descripcion = descripcion
+		lugar.location = point
+		lugar.direccion = direccion
+		lugar.icono = icono
+		lugar.portada = portada
+		lugar.sitio_web = sitio_web
+		lugar.save()
+
+		context = {
+			'id' : request.POST.get('id'),
+			'nombre': nombre.nombre_espanol,
+			'direccion': direccion,
+			'descripcion': descripcion.descripcion_espanol,
+			'latitude': latitude,
+			'longtitude': longtitude,
+			'sitio_web': sitio_web
+		}
 		
+	else:
+		lugar = Lugar.objects.all().count()
+		lugar = lugar + 1
+		nombre = "Lugar %s" % lugar
 
-	lugar = Lugar(
-		nombre = nombre,
-		location = point
-	).save()
+		nombre = Nombre(
+				nombre_arabe = "",
+				nombre_chino = "",
+				nombre_espanol = nombre,
+				nombre_frances = "",
+				nombre_ingles = "",
+				nombre_ruso = "",
+				nombre_portuges = ""
+		 	)
 
-	lugar = Lugar.objects.latest('id').id
+		point = Point(
+			latitude = latitude,
+			longtitude = longtitude
+		)
+			
 
-	return validarUsuario(request, '', lugar, "json")
+		lugar = Lugar(
+			nombre = nombre,
+			location = point
+		).save()
+
+		context = {
+			'id' : Lugar.objects.latest('id').id,
+			'nombre': nombre.nombre_espanol,
+			'latitude': latitude,
+			'longtitude': longtitude			
+		}
+
+	return validarUsuario(request, '', context, "json")
 
 def getLugar(request):
 
@@ -198,19 +275,23 @@ def getLugar(request):
 	portada = "";
 	icono = "";
 
+	if lugar.descripcion is not None:
+		descripcion = lugar.descripcion.descripcion_espanol
+	else:
+		descripcion =  ""
+
 	if lugar.icono is not None and lugar.icono != "":
 		icono = lugar.icono	
 	if lugar.icono is not None and lugar.icono != "":
 		portada = lugar.portada
 
 	if lugar.fecha_de_creacion != "":
-		print lugar.fecha_de_creacion
 		fecha_de_creacion = lugar.fecha_de_creacion.strftime("%Y-%m-%d")
 
 	context = {
 		'id' : lugar.id,
 		'nombre': lugar.nombre.nombre_espanol,
-		'descripcion': lugar.descripcion,
+		'descripcion': descripcion,
 		'categoria': lugar.categoria,
 		'ciudad': lugar.ciudad,
 		'latitude': lugar.location.latitude,

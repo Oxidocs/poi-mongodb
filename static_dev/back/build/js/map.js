@@ -3,13 +3,13 @@ var map, GeoMarker, infoWindow;
 
 var contents = '<h4 id="title" class="text-center">Nuevo Lugar</h4>';
 	contents += '<div class="ln_solid"></div>';
-	contents += '<form class="form-horizontal form-label-left">';
-	contents += '<div class="form-group">';
+	contents += '<form class="form-horizontal form-label-left" onsubmit="actualizarLugar($(this))">';
+	/*contents += '<div class="form-group">';
 	contents += '<label class="col-xs-3 control-label">Id: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input id="id" name="id" class="form-control" type="text" placeholder="Id" />';
-	contents += '</div>';
-	contents += '</div>';
+	contents += '<div class="col-xs-9">';*/
+	contents += '<input id="id" name="id" class="form-control" type="hidden" placeholder="Id" />';
+	/*contents += '</div>';
+	contents += '</div>';*/
 	contents += '<div class="form-group">';
 	contents += '<label class="col-xs-3 control-label">Nombre: </label>';
 	contents += '<div class="col-xs-9">';
@@ -22,18 +22,18 @@ var contents = '<h4 id="title" class="text-center">Nuevo Lugar</h4>';
 	contents += '<input id="direccion" name="direccion" class="form-control" type="text" placeholder="Dirección" />';
 	contents += '</div>';
 	contents += '</div>';
-	contents += '<div class="form-group">';
+	/*contents += '<div class="form-group">';
 	contents += '<label class="col-xs-3 control-label">Latitud: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input id="latitud" name="latitud" class="form-control" type="text" placeholder="Latitud" />';
-	contents += '</div>';
-	contents += '</div>';
-	contents += '<div class="form-group">';
+	contents += '<div class="col-xs-9">';*/
+	contents += '<input id="latitud" name="latitud" class="form-control" type="hidden" placeholder="Latitud" />';
+	/*contents += '</div>';
+	contents += '</div>';*/
+	/*contents += '<div class="form-group">';
 	contents += '<label class="col-xs-3 control-label">Longitud: </label>';
-	contents += '<div class="col-xs-9">';
-	contents += '<input id="longitud" name="longitud" class="form-control" type="text" placeholder="Longitud" />';
-	contents += '</div>';
-	contents += '</div>';
+	contents += '<div class="col-xs-9">';*/
+	contents += '<input id="longitud" name="longitud" class="form-control" type="hidden" placeholder="Longitud" />';
+	/*contents += '</div>';
+	contents += '</div>';*/
 	contents += '<div class="form-group">';
 	contents += '<label class="col-xs-3 control-label">Icono: </label>';
 	contents += '<div class="col-xs-9">';
@@ -161,7 +161,8 @@ function crearMarcador(marker) {
 		console.log(marker_created);
 		infoWindow.setContent(contents);
 		infoWindow.open(map, marker_created);
-		cargarLugares(marker_created.id);
+		console.log(marker_created);
+		cargarLugares(marker_created.data_marker.id);
 	});
 }
 
@@ -182,7 +183,9 @@ function guardarLugar(lat, long, marker){
 		},
 		success : function(data) {
 
-			marker.set("id", data);
+			marker.set("data_marker", data);
+			cargarFormularioLugar(data.id, data.nombre, '', data.latitude, data.longtitude, '', '', 
+				'', '')
 
 			new PNotify({
 				title: 'Guardado',
@@ -198,8 +201,43 @@ function guardarLugar(lat, long, marker){
 	});
 }
 
-function actualizarLugar(){
+function actualizarLugar(form){
+	event.preventDefault();
+	var csrftoken = getCookie('csrftoken');
+	var url = '/plataforma/guardar_lugar/';
+	var data = new FormData(form.get(0));
 
+	$.ajax({
+		url : url,
+		type : "POST",
+		data: data,
+		cache: false,
+		contentType: false,
+		processData: false,
+		type: 'POST',
+
+		beforeSend: function(xhr, settings) {
+			if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			}
+		},
+		success : function(data) {
+
+			console.log(data);
+			cargarFormularioLugar(data.id, data.nombre, data.direccion, data.latitude, data.longtitude, data.icono, data.portada, data.descripcion, data.sitio_web);
+
+			new PNotify({
+				title: 'Guardado',
+				text: 'Se han realizado los cambios exitosamente',
+				type: 'success',
+				styling: 'bootstrap3'
+			});
+		},
+		error : function(xhr,errmsg,err) {
+			error();
+			console.log(xhr.status + ": " + xhr.responseText);
+		}
+	});
 }
 
 function mostrarLugar(){
