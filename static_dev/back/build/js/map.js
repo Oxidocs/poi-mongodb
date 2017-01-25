@@ -61,7 +61,7 @@ var contents = '<h4 id="title" class="text-center">Nuevo Lugar</h4>';
 	contents += '<div class="ln_solid"></div>';
 	contents +=	'<div class="form-group">';
 	contents +=	'<div class="col-xs-6 col-xs-offset-6">';
-	contents += '<button type="reset" class="btn btn-primary">Cancelar</button>';
+	contents += '<button type="button" class="btn btn-primary">Cancelar</button>';
 	contents += '<button type="submit" class="btn btn-success">Guardar</button>';
 	contents += '</div>';
 	contents += '</div>';
@@ -80,8 +80,18 @@ function initialize() {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 
-	map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	map = new google.maps.Map(document.getElementById('map'), mapOptions);	
+	map.data.loadGeoJson('http://localhost:3000/plataforma/mostrar_lugares/');
+	
 	infoWindow = new google.maps.InfoWindow();
+
+	map.data.addListener('click', function(event) {
+		infoWindow.setContent(contents);
+		infoWindow.setPosition(event.feature.getGeometry().get());
+		infoWindow.setOptions({pixelOffset: new google.maps.Size(0,-30)});
+		infoWindow.open(map);
+		cargarLugares(event.feature.getProperty('id'));
+	});  
 
 	GeoMarker = new GeolocationMarker();
 	GeoMarker.setCircleOptions({fillColor: '#808080'});
@@ -155,13 +165,14 @@ function crearMarcador(marker) {
 	marker_created.setMap(map);
 
 	infoWindow.setContent(contents);
+	infoWindow.setOptions({pixelOffset: new google.maps.Size(0,10)});
 	infoWindow.open(map, marker_created);
 
 	marker_created.addListener('click', function() {
 		console.log(marker_created);
 		infoWindow.setContent(contents);
+		infoWindow.setOptions({pixelOffset: new google.maps.Size(0,10)});
 		infoWindow.open(map, marker_created);
-		console.log(marker_created);
 		cargarLugares(marker_created.data_marker.id);
 	});
 }

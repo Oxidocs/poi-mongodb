@@ -155,6 +155,7 @@ def editarPerfil(request):
 		}
 		return validarUsuario(request, 'plataforma/editar_perfil.html', response, "render")
 
+@login_required(login_url='/plataforma/login/')
 def saveLugar(request):
 
 	latitude = request.POST.get('lat')
@@ -266,24 +267,26 @@ def saveLugar(request):
 
 	return validarUsuario(request, '', context, "json")
 
+@login_required(login_url='/plataforma/login/')
 def getLugar(request):
 
 	lugar_id = request.POST.get('id')
 
 	lugar = Lugar.objects.get(pk=lugar_id);
 	fecha_de_creacion = ""
+	descripcion =  ""
 	portada = "";
 	icono = "";
 
+	if lugar.icono is not None and lugar.icono !="":
+		icono = lugar.icono
+
+	if lugar.portada is not None and lugar.portada !="":
+		portada = lugar.portada
+	
 	if lugar.descripcion is not None:
 		descripcion = lugar.descripcion.descripcion_espanol
-	else:
-		descripcion =  ""
-
-	if lugar.icono is not None and lugar.icono != "":
-		icono = lugar.icono	
-	if lugar.icono is not None and lugar.icono != "":
-		portada = lugar.portada
+		
 
 	if lugar.fecha_de_creacion != "":
 		fecha_de_creacion = lugar.fecha_de_creacion.strftime("%Y-%m-%d")
@@ -308,4 +311,60 @@ def getLugar(request):
 
 	return validarUsuario(request,'',context, "json")
 
+@login_required(login_url='/plataforma/login/')	
+def getTodosLugares(request):
+
+	features = []
+	lugares= Lugar.objects.all()
+	descripcion = ""
+	fecha_de_creacion = ""
+	portada = "";
+	icono = "";
+
+	for lugar in lugares:
+
+		if lugar.descripcion is not None and lugar.descripcion.descripcion_espanol != "":
+			descripcion = lugar.descripcion.descripcion_espanol
+
+		if lugar.icono is not None and lugar.icono != "":
+			icono = lugar.icono
+
+		if lugar.portada is not None and lugar.portada != "":
+			portada = lugar.portada
+
+		if lugar.fecha_de_creacion != "":
+			fecha_de_creacion = lugar.fecha_de_creacion.strftime("%Y-%m-%d")
+
+		features.append(
+			{
+				"type": "Feature",
+				"properties": {
+					"id": lugar.id,
+					"name": lugar.nombre.nombre_espanol,
+					"descripcion" : descripcion,
+					"categoria_id" : lugar.categoria_id,
+					"ciudad" : lugar.ciudad,
+					"direccion" : lugar.direccion,
+					"icono" : icono,
+					"portada" : portada,
+					"sitio_web" : lugar.sitio_web,
+					"redes_sociales" : lugar.redes_sociales,
+					"fecha_de_creacion" : fecha_de_creacion,
+					"tags" : lugar.tags,
+				},
+				"geometry": {
+					"type": "Point",
+					"coordinates": [lugar.location.longtitude, lugar.location.latitude]					
+				},
+			}
+		)
+
+
+
+	context = {
+		"type": "FeatureCollection",
+		"features": features
+	}
+
+	return validarUsuario(request,'',context, "json")
 
