@@ -81,7 +81,7 @@ function initialize() {
 	};
 
 	map = new google.maps.Map(document.getElementById('map'), mapOptions);	
-	map.data.loadGeoJson('http://localhost:3000/plataforma/mostrar_lugares/');
+	map.data.loadGeoJson('/plataforma/mostrar_lugares/');
 	
 	infoWindow = new google.maps.InfoWindow();
 
