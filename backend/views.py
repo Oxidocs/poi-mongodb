@@ -187,24 +187,34 @@ def saveLugar(request):
 		else:
 			nombre = request.POST.get('nombre')
 
-		nombre = Nombre(
-				nombre_arabe = "",
-				nombre_chino = "",
+		if request.POST.get('nombre_ingles') is None or request.POST.get('nombre_ingles')=='':
+			nombre_ingles = nombre
+		else:
+			nombre_ingles = request.POST.get('nombre_ingles')		
+
+		if request.POST.get('descripcion_ingles') is None or request.POST.get('descripcion_ingles')=='':
+			descripcion_ingles = nombre
+		else:
+			descripcion_ingles = request.POST.get('descripcion_ingles')
+
+		nombre_embededd = Nombre(
+				nombre_arabe = nombre,
+				nombre_chino = nombre,
 				nombre_espanol = nombre,
-				nombre_frances = "",
-				nombre_ingles = "",
-				nombre_ruso = "",
-				nombre_portuges = ""
+				nombre_frances = nombre,
+				nombre_ingles = nombre_ingles,
+				nombre_ruso = nombre,
+				nombre_portuges = nombre
 		 	)
 
-		descripcion = Descripcion(
-				descripcion_arabe = "",
-				descripcion_chino = "",
+		descripcion_embededd = Descripcion(
+				descripcion_arabe = descripcion,
+				descripcion_chino = descripcion,
 				descripcion_espanol = descripcion,
-				descripcion_frances = "",
-				descripcion_ingles = "",
-				descripcion_ruso = "",
-				descripcion_portuges = ""
+				descripcion_frances = descripcion,
+				descripcion_ingles = descripcion_ingles,
+				descripcion_ruso = descripcion,
+				descripcion_portuges = descripcion
 			)	
 
 		point = Point(
@@ -213,8 +223,8 @@ def saveLugar(request):
 		)
 
 		lugar = Lugar.objects.get(pk=id_lugar)
-		lugar.nombre = nombre
-		lugar.descripcion = descripcion
+		lugar.nombre_embededd = nombre
+		lugar.descripcion_embededd = descripcion
 		lugar.location = point
 		lugar.direccion = direccion
 		lugar.icono = icono
@@ -223,10 +233,21 @@ def saveLugar(request):
 		lugar.save()
 
 		context = {
-			'id' : request.POST.get('id'),
-			'nombre': nombre.nombre_espanol,
-			'direccion': direccion,
-			'descripcion': descripcion.descripcion_espanol,
+			'id': request.POST.get('id'),
+			'nombre_arabe':nombre,
+			'nombre_chino':nombre,
+			'nombre_espanol':nombre,
+			'nombre_frances':nombre,
+			'nombre_ingles':nombre_ingles,
+			'nombre_ruso':nombre,
+			'nombre_portuges':nombre,
+			'descripcion_arabe':descripcion,
+			'descripcion_chino':descripcion,
+			'descripcion_espanol':descripcion,
+			'descripcion_frances':descripcion,
+			'descripcion_ingles':descripcion_ingles,
+			'descripcion_ruso':descripcion,
+			'descripcion_portuges':descripcion,
 			'latitude': latitude,
 			'longtitude': longtitude,
 			'sitio_web': sitio_web
@@ -237,14 +258,14 @@ def saveLugar(request):
 		lugar = lugar + 1
 		nombre = "Lugar %s" % lugar
 
-		nombre = Nombre(
-				nombre_arabe = "",
-				nombre_chino = "",
+		nombre_embededd = Nombre(
+				nombre_arabe = nombre,
+				nombre_chino = nombre,
 				nombre_espanol = nombre,
-				nombre_frances = "",
-				nombre_ingles = "",
-				nombre_ruso = "",
-				nombre_portuges = ""
+				nombre_frances = nombre,
+				nombre_ingles = nombre,
+				nombre_ruso = nombre,
+				nombre_portuges = nombre
 		 	)
 
 		point = Point(
@@ -254,15 +275,21 @@ def saveLugar(request):
 			
 
 		lugar = Lugar(
-			nombre = nombre,
+			nombre = nombre_embededd,
 			location = point
 		).save()
 
 		context = {
-			'id' : Lugar.objects.latest('id').id,
-			'nombre': nombre.nombre_espanol,
+			'id': Lugar.objects.latest('id').id,
+			'nombre_arabe':nombre,
+			'nombre_chino':nombre,
+			'nombre_espanol':nombre,
+			'nombre_frances':nombre,
+			'nombre_ingles':nombre,
+			'nombre_ruso':nombre,
+			'nombre_portuges':nombre,
 			'latitude': latitude,
-			'longtitude': longtitude			
+			'longtitude': longtitude
 		}
 
 	return validarUsuario(request, '', context, "json")
@@ -274,7 +301,6 @@ def getLugar(request):
 
 	lugar = Lugar.objects.get(pk=lugar_id);
 	fecha_de_creacion = ""
-	descripcion =  ""
 	portada = "";
 	icono = "";
 
@@ -285,16 +311,47 @@ def getLugar(request):
 		portada = lugar.portada
 	
 	if lugar.descripcion is not None:
-		descripcion = lugar.descripcion.descripcion_espanol
-		
+		descripcion = {
+			'descripcion_arabe':lugar.descripcion.descripcion_arabe,
+			'descripcion_chino':lugar.descripcion.descripcion_chino,
+			'descripcion_espanol':lugar.descripcion.descripcion_espanol,
+			'descripcion_frances':lugar.descripcion.descripcion_frances,
+			'descripcion_ingles':lugar.descripcion.descripcion_ingles,
+			'descripcion_ruso':lugar.descripcion.descripcion_ruso,
+			'descripcion_portuges':lugar.descripcion.descripcion_portuges
+		}
+	else:
+		descripcion = {
+			'descripcion_arabe':'',
+			'descripcion_chino':'',
+			'descripcion_espanol':'',
+			'descripcion_frances':'',
+			'descripcion_ingles':'',
+			'descripcion_ruso':'',
+			'descripcion_portuges':''
+		}	
 
 	if lugar.fecha_de_creacion != "":
 		fecha_de_creacion = lugar.fecha_de_creacion.strftime("%Y-%m-%d")
 
+	print descripcion
+
 	context = {
 		'id' : lugar.id,
-		'nombre': lugar.nombre.nombre_espanol,
-		'descripcion': descripcion,
+		'nombre_arabe':lugar.nombre.nombre_arabe,
+		'nombre_chino':lugar.nombre.nombre_chino,
+		'nombre_espanol':lugar.nombre.nombre_espanol,
+		'nombre_frances':lugar.nombre.nombre_frances,
+		'nombre_ingles':lugar.nombre.nombre_ingles,
+		'nombre_ruso':lugar.nombre.nombre_ruso,
+		'nombre_portuges':lugar.nombre.nombre_portuges,
+		'descripcion_arabe':descripcion['descripcion_arabe'],
+		'descripcion_chino':descripcion['descripcion_chino'],
+		'descripcion_espanol':descripcion['descripcion_espanol'],
+		'descripcion_frances':descripcion['descripcion_frances'],
+		'descripcion_ingles':descripcion['descripcion_ingles'],
+		'descripcion_ruso':descripcion['descripcion_ruso'],
+		'descripcion_portuges':descripcion['descripcion_portuges'],
 		'categoria': lugar.categoria,
 		'ciudad': lugar.ciudad,
 		'latitude': lugar.location.latitude,

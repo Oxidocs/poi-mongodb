@@ -1,15 +1,20 @@
 
 var map, GeoMarker, infoWindow;
 
-var contents = '<h4 id="title" class="text-center">Nuevo Lugar</h4>';
-	contents += '<div class="ln_solid"></div>';
-	contents += '<form class="form-horizontal form-label-left" onsubmit="actualizarLugar($(this))">';
-	/*contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Id: </label>';
-	contents += '<div class="col-xs-9">';*/
+var contents = '<div class="" role="tabpanel" data-example-id="togglable-tabs">';
+	contents += '<div class="col-md-12 col-sm-12 col-xs-12">';
+	contents += '<h2 id="title"> Nuevo Lugar </h2><br />';	
+	contents += '<form class="form-horizontal form-label-left" onsubmit="actualizarLugar($(this))">';	
+	contents += '<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">';
+	contents += '<li role="presentation" class="active"><a href="#tab_español" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Español</a>';
+	contents += '</li>';
+	contents += '<li role="presentation" class=""><a href="#tab_ingles" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Inglés</a>';
+	contents += '</li>';
+	contents += '</ul>';
+	contents += '<div id="myTabContent" class="tab-content">';
+	contents += '<div role="tabpanel" class="tab-pane fade active in" id="tab_español" aria-labelledby="home-tab">';
+	
 	contents += '<input id="id" name="id" class="form-control" type="hidden" placeholder="Id" />';
-	/*contents += '</div>';
-	contents += '</div>';*/
 	contents += '<div class="form-group">';
 	contents += '<label class="col-xs-3 control-label">Nombre: </label>';
 	contents += '<div class="col-xs-9">';
@@ -22,18 +27,8 @@ var contents = '<h4 id="title" class="text-center">Nuevo Lugar</h4>';
 	contents += '<input id="direccion" name="direccion" class="form-control" type="text" placeholder="Dirección" />';
 	contents += '</div>';
 	contents += '</div>';
-	/*contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Latitud: </label>';
-	contents += '<div class="col-xs-9">';*/
 	contents += '<input id="latitud" name="latitud" class="form-control" type="hidden" placeholder="Latitud" />';
-	/*contents += '</div>';
-	contents += '</div>';*/
-	/*contents += '<div class="form-group">';
-	contents += '<label class="col-xs-3 control-label">Longitud: </label>';
-	contents += '<div class="col-xs-9">';*/
 	contents += '<input id="longitud" name="longitud" class="form-control" type="hidden" placeholder="Longitud" />';
-	/*contents += '</div>';
-	contents += '</div>';*/
 	contents += '<div class="form-group">';
 	contents += '<label class="col-xs-3 control-label">Icono: </label>';
 	contents += '<div class="col-xs-9">';
@@ -61,11 +56,42 @@ var contents = '<h4 id="title" class="text-center">Nuevo Lugar</h4>';
 	contents += '<div class="ln_solid"></div>';
 	contents +=	'<div class="form-group">';
 	contents +=	'<div class="col-xs-6 col-xs-offset-6">';
-	contents += '<button type="button" class="btn btn-primary">Cancelar</button>';
+	contents += '<button type="button" class="btn btn-danger">Cancelar</button>';
 	contents += '<button type="submit" class="btn btn-success">Guardar</button>';
 	contents += '</div>';
 	contents += '</div>';
+
+	contents += '</div>';
+	contents += '<div role="tabpanel" class="tab-pane fade" id="tab_ingles" aria-labelledby="profile-tab">';
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Name: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<input id="nombre_ingles" name="nombre_ingles" class="form-control" type="text" placeholder="Name" />';
+	contents += '</div>';
+	contents += '</div>';	
+	contents += '<div class="form-group">';
+	contents += '<label class="col-xs-3 control-label">Description: </label>';
+	contents += '<div class="col-xs-9">';
+	contents += '<textarea id="descripcion_ingles" name="descripcion_ingles" class="form-control" placeholder="Description"></textarea>';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '<div class="ln_solid"></div>';
+	contents +=	'<div class="form-group">';
+	contents +=	'<div class="col-xs-6 col-xs-offset-6">';
+	contents += '<button type="button" class="btn btn-danger">Delete</button>';
+	contents += '<button type="submit" class="btn btn-success">Save</button>';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '</div>';
+	contents += '</div>';
+
 	contents += '</form>';
+	contents += '</div>';
+	contents += '</div>';
+
+	//quitar scroll bar info windows maps
+	contents = '<div class="scrollFix">'+contents+'</div>';
 
 function initialize() {
 
@@ -83,7 +109,9 @@ function initialize() {
 	map = new google.maps.Map(document.getElementById('map'), mapOptions);	
 	map.data.loadGeoJson('/plataforma/mostrar_lugares/');
 	
-	infoWindow = new google.maps.InfoWindow();
+	infoWindow = new google.maps.InfoWindow({
+    	minWidth: 600
+  	});
 
 	map.data.addListener('click', function(event) {
 		infoWindow.setContent(contents);
@@ -195,8 +223,8 @@ function guardarLugar(lat, long, marker){
 		success : function(data) {
 
 			marker.set("data_marker", data);
-			cargarFormularioLugar(data.id, data.nombre, '', data.latitude, data.longtitude, '', '', 
-				'', '')
+			cargarFormularioLugar(data.id, data.nombre_espanol, data.nombre_ingles, '', data.latitude, data.longtitude, '', '', 
+				'', '','')
 
 			new PNotify({
 				title: 'Guardado',
@@ -235,7 +263,7 @@ function actualizarLugar(form){
 		success : function(data) {
 
 			console.log(data);
-			cargarFormularioLugar(data.id, data.nombre, data.direccion, data.latitude, data.longtitude, data.icono, data.portada, data.descripcion, data.sitio_web);
+			cargarFormularioLugar(data.id, data.nombre_espanol, data.nombre_ingles, data.direccion, data.latitude, data.longtitude, data.icono, data.portada, data.descripcion_español, data.descripcion_ingles, data.sitio_web);
 
 			new PNotify({
 				title: 'Guardado',
@@ -274,7 +302,7 @@ function cargarLugares(id){
 		},
 		success : function(data) {
 			console.log(data);
-			cargarFormularioLugar(data.id, data.nombre, data.direccion, data.latitude, data.longtitude, data.icono, data.portada, data.descripcion, data.sitio_web);
+			cargarFormularioLugar(data.id, data.nombre_espanol, data.nombre_ingles, data.direccion, data.latitude, data.longtitude, data.icono, data.portada, data.descripcion_español, data.descripcion_ingles, data.sitio_web);
 		},
 		error : function(xhr,errmsg,err) {
 			
@@ -284,7 +312,7 @@ function cargarLugares(id){
 
 }
 
-function cargarFormularioLugar(id, nombre, direccion, latitud, longitud, icono, portada, descripcion, sitio_web){
+function cargarFormularioLugar(id, nombre, nombre_ingles, direccion, latitud, longitud, icono, portada, descripcion, descripcion_ingles, sitio_web){
 	
 	$('#id').val(id);
 	$('#title').text(nombre);
@@ -296,7 +324,8 @@ function cargarFormularioLugar(id, nombre, direccion, latitud, longitud, icono, 
 	$('#portada').val(portada);
 	$('#descripcion').val(descripcion);
 	$('#sitio_web').val(sitio_web);
-
+	$('#nombre_ingles').val(nombre_ingles);
+	$('#descripcion_ingles').val(descripcion_ingles);
 }
 
 function error(){

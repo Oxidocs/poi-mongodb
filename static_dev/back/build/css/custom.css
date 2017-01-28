@@ -3972,10 +3972,11 @@ ul.notifications {
   padding: 0 0 4px 0; }
 
 #map {
-  height: 100vh;
+  height: 85.7vh;
   position: relative;
   width: 100%; }
 
-@media (max-width: 1023px) {
-  #map {
-    height: 300px; } }
+.scrollFix {
+  line-height: 1.35;
+  overflow: hidden;
+  white-space: nowrap; }
