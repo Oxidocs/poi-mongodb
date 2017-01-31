@@ -190,10 +190,11 @@ def saveLugar(request):
 		if request.POST.get('nombre_ingles') is None or request.POST.get('nombre_ingles')=='':
 			nombre_ingles = nombre
 		else:
+			request.POST.get('nombre_ingles')
 			nombre_ingles = request.POST.get('nombre_ingles')		
 
 		if request.POST.get('descripcion_ingles') is None or request.POST.get('descripcion_ingles')=='':
-			descripcion_ingles = nombre
+			descripcion_ingles = descripcion
 		else:
 			descripcion_ingles = request.POST.get('descripcion_ingles')
 
@@ -223,8 +224,8 @@ def saveLugar(request):
 		)
 
 		lugar = Lugar.objects.get(pk=id_lugar)
-		lugar.nombre_embededd = nombre
-		lugar.descripcion_embededd = descripcion
+		lugar.nombre = nombre_embededd
+		lugar.descripcion = descripcion_embededd
 		lugar.location = point
 		lugar.direccion = direccion
 		lugar.icono = icono
