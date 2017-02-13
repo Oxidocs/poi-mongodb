@@ -17,4 +17,6 @@ urlpatterns = [
 	url(r'^guardar_lugar/', views.saveLugar, name='guardar-lugar'),
 	url(r'^mostrar_lugar/', views.getLugar, name='mostrar-lugar'),
 	url(r'^mostrar_lugares/', views.getTodosLugares, name='mostrar-lugares'),
+	url(r'^actualizar_posicion/', views.editLocation, name='edit-posicion'),
+	url(r'^borrar_lugar/', views.deleteLugar, name='borrar-lugar'),
 ]
